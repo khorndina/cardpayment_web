@@ -39,7 +39,7 @@
       @include('admin.layout.sidebar')
 
       <!-- Main Content -->
-      @yield('conten')
+      @yield('content')
 
       <footer class="main-footer">
         <div class="footer-left">

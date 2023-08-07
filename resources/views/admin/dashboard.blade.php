@@ -1,6 +1,6 @@
 @extends('admin.layout.master')
 
-@section('conten')
+@section('content')
 
 <div class="main-content">
     <section class="section">
@@ -72,4 +72,4 @@
     </section>
   </div>
 
-  @endsection
+@endsection
