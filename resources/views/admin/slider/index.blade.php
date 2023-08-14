@@ -22,7 +22,7 @@
                     <div class="card-header-action"><a href="{{ route('admin.slider.create') }}" class="btn btn-primary">+ Create New</a></div>
                   </div>
                   <div class="card-body">
-
+                    {{$dataTable->table()}}
                   </div>
                 </div>
               </div>
@@ -31,3 +31,7 @@
         </section>
       </div>
 @endsection
+
+@push('scripts')
+  {{ $dataTable->scripts(attributes: ['type' => 'module']) }}
+@endpush
