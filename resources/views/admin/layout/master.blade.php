@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
+  <meta name="csrf-token" content="{{ csrf_token() }}" />
   <title>General Dashboard &mdash; Dina</title>
 
   <!-- General CSS Files -->
@@ -19,6 +20,8 @@
   {{-- yajra datatables --}}
   <link rel="stylesheet" href="//cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
   <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
+  {{-- sweet alert --}}
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
   <!-- Template CSS -->
   <link rel="stylesheet" href="{{ asset('backend/assets/css/style.css') }}">
@@ -94,6 +97,62 @@
             toastr.error("{{$error}}")
         @endforeach
     @endif
+  </script>
+
+  {{-- Dynamic Delete Alert --}}
+  <script>
+    $(document).ready(function(){
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+
+        $('body').on('click', '.delete-item', function(event){
+            event.preventDefault();
+
+            let deleteurl = $(this).attr('href');
+
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "Do you want to delete this Slider",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    type: 'DELETE',
+                    url: deleteurl,
+
+                    success: function(data){
+                        // console.log(data);
+                        if(data.status == 'success'){
+                            Swal.fire(
+                            'Deleted!',
+                            data.message
+                            )
+                            // reload page
+                            window.location.reload();
+                        }else if(data.status == 'error'){
+                            Swal.fire(
+                            'Can not Deleted!',
+                            data.message
+                            )
+                        }
+                    },
+
+                    error:function(xhr, status, error){
+                        console.log(error);
+                    }
+                })
+            }
+            })
+        })
+    })
   </script>
 
   {{-- yajra datatables --}}

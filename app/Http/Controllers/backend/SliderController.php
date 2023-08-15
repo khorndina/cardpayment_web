@@ -120,6 +120,13 @@ class SliderController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $slider = Slider::findOrFail($id);
+
+        // delete slider from database
+        $this->deleteImage($slider->banner);
+
+        $slider->delete();
+
+        return response(['status'=>'success', 'message'=>'Deleted Successfully!']);
     }
 }
