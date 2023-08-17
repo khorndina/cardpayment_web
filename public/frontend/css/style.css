@@ -1387,6 +1387,7 @@ PRODUCT MODAL VIEW END
   background-repeat: no-repeat !important;
   padding: 160px 100px;
   width: 100%;
+  height: 370px;
 }
 
 .wsus__single_slider_text h3 {
