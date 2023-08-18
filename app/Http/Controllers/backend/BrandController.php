@@ -111,6 +111,21 @@ class BrandController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $brand = Brand::findOrFail($id);
+        // delete slider from database
+        $this->deleteImage($brand->logo);
+        $brand->delete();
+        return response(['status'=>'success', 'message'=>'Deleted Successfully!']);
+    }
+
+
+    public function changestatus(Request $request){
+        // dd($request->all());
+
+        $brands = Brand::findOrFail($request->id);
+        $brands->status = $request->ischecked == "true" ? 1 : 0;
+        $brands->save();
+
+        return response(['message'=>'status has been updated!']);
     }
 }
