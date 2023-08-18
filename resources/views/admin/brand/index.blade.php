@@ -5,11 +5,11 @@
     <div class="main-content">
         <section class="section">
           <div class="section-header">
-            <h1>child-Category</h1>
+            <h1>List of Brand</h1>
             <div class="section-header-breadcrumb">
               <div class="breadcrumb-item active"><a href="#">Dashboard</a></div>
               <div class="breadcrumb-item"><a href="#">Components</a></div>
-              <div class="breadcrumb-item">child-Category</div>
+              <div class="breadcrumb-item">Brand</div>
             </div>
           </div>
 
@@ -18,8 +18,8 @@
               <div class="col-12">
                 <div class="card">
                   <div class="card-header">
-                    <h4>child-Categories</h4>
-                    <div class="card-header-action"><a href="{{ route('admin.child-category.create') }}" class="btn btn-primary">+ Create New</a></div>
+                    <h4>List All Brand</h4>
+                    <div class="card-header-action"><a href="{{ route('admin.brand.create') }}" class="btn btn-primary">+ Create New</a></div>
                   </div>
                   <div class="card-body">
                     {{$dataTable->table()}}
@@ -41,17 +41,17 @@
         // alert('helelll');
 		let ischecked = $(this).is(':checked');
 		let id = $(this).data('id');
-         console.log(id); /**show on console when inspec*/
+        // console.log(id); /**show on console when inspec*/
         $.ajax({
-                url: "{{route('admin.child-category.changestatus')}}",
+                url: "{{route('admin.brand.changestatus')}}",
                 method: 'PUT',
                 data:{
                     ischecked:ischecked,
                     id:id
                 },
                 success: function(data){
-                    console.log(data);
-                    // toastr.success(data.message);
+                    // console.log(data);
+                    toastr.success(data.message);
                 },
                 error:function(xhr, status, error){
                     console.log(error);

@@ -18,38 +18,44 @@
               <div class="col-12">
                 <div class="card">
                   <div class="card-header">
-                    <h4>Update child-Category</h4>
+                    <h4>Create child-Category</h4>
                   </div>
                   <div class="card-body">
-                    <form action="{{ route('admin.child-category.update', $subcategory->id) }}" method="POST" enctype="multipart/form-data">
+                    <form action="{{ route('admin.child-category.update', $childcategory->id) }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
                         <div class="form-group">
                             <label for="category">Category</label>
-                            <select id="category" name="category" class="form-control">
+                            <select id="category" name="category" class="form-control main-category">
                             <option value="">Select</option>
                             @foreach ($categories as $category)
-                                <option {{$category->id == $subcategory->category_id ? 'selected': ''}} value="{{$category->id}}">{{$category->name}}</option>
+                            <option {{$category->id == $childcategory->category_id ? 'selected': ''}} value="{{$category->id}}">{{$category->name}}</option>
+                            @endforeach
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="category">Sub-Category</label>
+                            <select id="category" name="sub_category" class="form-control sub-category">
+                            <option value="">Select</option>
+                            {{-- handle by ajax request --}}
+                            @foreach ($subcategories as $subcategory)
+                            <option {{$subcategory->id == $childcategory->sub_category_id ? 'selected' : ''}} value="{{$subcategory->id}}">{{$subcategory->name}}</option>
                             @endforeach
                             </select>
                         </div>
                         <div class="form-group">
                             <label>Name</label>
-                            <input type="text" id="name" name="name" class="form-control" value="{{$subcategory->name}}">
+                            <input type="text" id="name" name="name" class="form-control" value="{{$childcategory->name}}">
                         </div>
-                        {{-- <div class="form-group">
-                            <label>Slug</label>
-                            <input type="text" id="starting_price" name="starting_price" class="form-control" value="{{old('starting_price')}}">
-                        </div> --}}
                         <div class="form-group">
                             <label for="status">Status</label>
                             <select id="status" name="status" class="form-control">
-                            <option {{$subcategory->status == 1 ? 'selected': ''}} value="1">Active</option>
-                            <option {{$subcategory->status == 0 ? 'selected': ''}} value="0">Inactive</option>
+                            <option {{$childcategory->status == 1 ? 'selected': ''}} value="1">Active</option>
+                            <option {{$childcategory->status == 0 ? 'selected': ''}} value="0">Inactive</option>
                             </select>
                         </div>
                         <div class="card-footer">
-                            <button class="btn btn-primary">Update</button>
+                            <button class="btn btn-primary">UPDATE</button>
                         </div>
                     </form>
                   </div>
@@ -60,3 +66,33 @@
         </section>
       </div>
 @endsection
+
+@push('scripts')
+    <script>
+        $(document).ready(function(){
+            $('body').on('change', '.main-category', function(e){
+                // alert('hi');
+                let id = $(this).val();
+                // console.log(id);
+                $.ajax({
+                    method: 'GET',
+                    url: "{{route('admin.child-category.getSubCategory')}}",
+                    data: {
+                        id: id
+                    },
+                    success:function(data){
+                        // console.log(data);
+
+                        $('.sub-category').html('<option value="">Select</option>')
+                        $.each(data, function(i, item){
+                            $('.sub-category').append(`<option value="${item.id}">${item.name}</option>`)
+                        })
+                    },
+                    error:function(xhr, status, error){
+                        console.log(error);
+                    }
+                })
+            })
+        })
+    </script>
+@endpush

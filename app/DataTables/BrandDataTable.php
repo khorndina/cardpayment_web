@@ -2,7 +2,7 @@
 
 namespace App\DataTables;
 
-use App\Models\childCategory;
+use App\Models\Brand;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
@@ -12,7 +12,7 @@ use Yajra\DataTables\Html\Editor\Editor;
 use Yajra\DataTables\Html\Editor\Fields;
 use Yajra\DataTables\Services\DataTable;
 
-class childCategoryDataTable extends DataTable
+class BrandDataTable extends DataTable
 {
     /**
      * Build the DataTable class.
@@ -23,15 +23,21 @@ class childCategoryDataTable extends DataTable
     {
         return (new EloquentDataTable($query))
             ->addColumn('action', function($query){
-                $EditBtn = "<a href='".route('admin.child-category.edit', $query->id)."' class='btn btn-primary ml-2'> Edit </a>";
-                $DeleteBtn = "<a href='".route('admin.child-category.destroy', $query->id)."' class='btn btn-danger ml-2 delete-item'> Delete </a>";
+                $EditBtn = "<a href='".route('admin.brand.edit', $query->id)."' class='btn btn-primary ml-2'> Edit </a>";
+                $DeleteBtn = "<a href='".route('admin.brand.destroy', $query->id)."' class='btn btn-danger ml-2 delete-item'> Delete </a>";
                 return $EditBtn.$DeleteBtn;
             })
-            ->addColumn('category', function($query){
-                return $query->category->name;
+            ->addColumn('logo', function($query){
+                return "<img width='20%' src='".asset($query->logo)."'></img>";
             })
-            ->addColumn('sub_category', function($query){
-                return $query->subcategory->name;
+            ->addColumn('is_featured', function($query){
+                $is_featured = "<li class='badge badge-success'>Active</li>";
+                $un_featured = "<li class='badge badge-danger'>Inactive</li>";
+                if($query->is_featured == 1){
+                    return $is_featured;
+                }else{
+                    return $un_featured;
+                }
             })
             ->addColumn('status', function($query){
                 if($query->status == 0){
@@ -48,14 +54,14 @@ class childCategoryDataTable extends DataTable
                     return $status;
                 }
             })
-            ->rawColumns(['action', 'status'])
+            ->rawColumns(['action', 'logo', 'is_featured', 'status'])
             ->setRowId('id');
     }
 
     /**
      * Get the query source of dataTable.
      */
-    public function query(childCategory $model): QueryBuilder
+    public function query(Brand $model): QueryBuilder
     {
         return $model->newQuery();
     }
@@ -66,7 +72,7 @@ class childCategoryDataTable extends DataTable
     public function html(): HtmlBuilder
     {
         return $this->builder()
-                    ->setTableId('childcategory-table')
+                    ->setTableId('brand-table')
                     ->columns($this->getColumns())
                     ->minifiedAjax()
                     //->dom('Bfrtip')
@@ -89,14 +95,14 @@ class childCategoryDataTable extends DataTable
     {
         return [
             Column::make('id'),
+            Column::make('logo'),
             Column::make('name'),
-            Column::make('category')->width(250),
-            Column::make('sub_category')->width(250),
-            Column::make('status')->width(150),
+            Column::make('is_featured'),
+            Column::make('status'),
             Column::computed('action')
                   ->exportable(false)
                   ->printable(false)
-                  ->width(150)
+                  ->width(200)
                   ->addClass('text-center'),
         ];
     }
@@ -106,6 +112,6 @@ class childCategoryDataTable extends DataTable
      */
     protected function filename(): string
     {
-        return 'childCategory_' . date('YmdHis');
+        return 'Brand_' . date('YmdHis');
     }
 }
