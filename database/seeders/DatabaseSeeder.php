@@ -21,5 +21,6 @@ class DatabaseSeeder extends Seeder
 
         // call seeder for insert data to database
         $this->call(UserSeeder::class);
+        $this->call(AdminProfileSeeder::class);
     }
 }

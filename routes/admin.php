@@ -1,9 +1,11 @@
 <?php
 
 use App\Http\Controllers\backend\AdminController;
+use App\Http\Controllers\backend\AdminVendorProfileController;
 use App\Http\Controllers\backend\BrandController;
 use App\Http\Controllers\backend\CategoryController;
 use App\Http\Controllers\backend\ChildCategoryController;
+use App\Http\Controllers\backend\ProductController;
 use App\Http\Controllers\backend\ProfileController;
 use App\Http\Controllers\backend\SliderController;
 use App\Http\Controllers\backend\SubCategoryController;
@@ -36,3 +38,12 @@ Route::resource('child-category', ChildCategoryController::class);
 // Brand route
 Route::put('brand/change-status', [BrandController::class, 'changestatus'])->name('brand.changestatus');
 Route::resource('brand', BrandController::class);
+
+// admin vendor profile route for display in sidebar
+Route::resource('vendor-profile', AdminVendorProfileController::class);
+
+// Product route
+// Route::put('sub-category/change-status', [SubCategoryController::class, 'changestatus'])->name('sub-category.changestatus');
+Route::get('products/get-subcategory', [ProductController::class, 'getSubCategory'])->name('products.getSubCategory');
+Route::get('products/get-childcategory', [ProductController::class, 'getChildCategory'])->name('products.getChildcategory');
+Route::resource('products', ProductController::class);
