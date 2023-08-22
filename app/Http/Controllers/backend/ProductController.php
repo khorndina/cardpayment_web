@@ -4,13 +4,21 @@ namespace App\Http\Controllers\backend;
 
 use App\DataTables\ProductDataTable;
 use App\Http\Controllers\Controller;
+use App\Models\Brand;
 use App\Models\Category;
 use App\Models\ChildCategory;
+use App\Models\Product;
 use App\Models\subCategory;
+use App\Traits\ImageUploadTrait;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Str;
 
 class ProductController extends Controller
 {
+
+    use ImageUploadTrait;
+
     /**
      * Display a listing of the resource.
      */
@@ -25,7 +33,8 @@ class ProductController extends Controller
     public function create()
     {
         $categories = Category::all();
-        return view('admin.product.create', compact('categories'));
+        $brands = Brand::all();
+        return view('admin.product.create', compact('categories', 'brands'));
     }
 
     /**
@@ -33,7 +42,59 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // dd($request->all());
+        // dd(Auth::user()->vendor->id);
+        $request->validate([
+            'name' => 'required|max:100',
+            'image' => 'required|max:3000|image',
+            'category' => 'required',
+            'sub_category' => 'required',
+            'child_category' => 'required',
+            'brand' => 'required',
+            'qty' => 'required|min:0',
+            'sku' => 'required',
+            'price' => 'required',
+            'video_link' => 'nullable|url',
+            'short_description' => 'required|max:200',
+            'long_description' => 'required|max:600',
+            'seo_title' => 'required|max:200',
+            'seo_description' => 'required|max:600',
+            'status' => 'required',
+        ]);
+
+        $product = new Product();
+
+        /**Upload Banner */
+        $imagepath = $this->uploadImage($request, 'image', 'uploards');
+
+        $product->name = $request->name;
+        $product->slug = Str::slug($request->name);
+        $product->thum_image = $imagepath;
+        $product->vendor_id = Auth::user()->vendor->id;
+        $product->category_id = $request->category;
+        $product->sub_category_id = $request->sub_category;
+        $product->child_category_id = $request->child_category;
+        $product->brand_id = $request->brand;
+        $product->qyt = $request->qty;
+        $product->long_description = $request->long_description;
+        $product->short_description = $request->short_description;
+        $product->video_link = $request->video_link;
+        $product->sku = $request->sku;
+        $product->price = $request->price;
+        $product->offer_price = $request->offer_price;
+        $product->offer_start_date = $request->offer_start_date;
+        $product->offer_end_date = $request->offer_end_date;
+        $product->product_type = $request->product_type;
+        $product->status = $request->status;
+        $product->is_approved = 1;
+        $product->seo_title = $request->seo_title;
+        $product->seo_description = $request->seo_description;
+
+        $product->save();
+
+        toastr('Creates Successfully!','success');
+        return redirect()->route('admin.products.index');
+
     }
 
     /**
@@ -49,7 +110,10 @@ class ProductController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $categories = Category::all();
+        $brands = Brand::all();
+        $product = Product::findOrfail($id);
+        return view('admin.product.edit', compact('categories', 'brands', 'product'));
     }
 
     /**
