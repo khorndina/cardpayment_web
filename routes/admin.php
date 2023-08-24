@@ -6,6 +6,8 @@ use App\Http\Controllers\backend\BrandController;
 use App\Http\Controllers\backend\CategoryController;
 use App\Http\Controllers\backend\ChildCategoryController;
 use App\Http\Controllers\backend\ProductController;
+use App\Http\Controllers\backend\ProductImageGalleryController;
+use App\Http\Controllers\backend\ProductVariantontroller;
 use App\Http\Controllers\backend\ProfileController;
 use App\Http\Controllers\backend\SliderController;
 use App\Http\Controllers\backend\SubCategoryController;
@@ -47,3 +49,12 @@ Route::resource('vendor-profile', AdminVendorProfileController::class);
 Route::get('products/get-subcategory', [ProductController::class, 'getSubCategory'])->name('products.getSubCategory');
 Route::get('products/get-childcategory', [ProductController::class, 'getChildCategory'])->name('products.getChildcategory');
 Route::resource('products', ProductController::class);
+
+// Product Image Gallery Route
+Route::get('product-image-gallery/{id}', [ProductImageGalleryController::class, 'showTable'])->name('product-image-gallery.showtable');
+Route::resource('product-image-gallery', ProductImageGalleryController::class);
+
+// Product Variant Route
+Route::get('product-variant/{id}', [ProductVariantontroller::class, 'showTable'])->name('product-variant.showtable');
+Route::get('product-variant/create/{id}', [ProductVariantontroller::class, 'createVariant'])->name('product-variant.create-varian');
+Route::resource('product-variant', ProductVariantontroller::class);

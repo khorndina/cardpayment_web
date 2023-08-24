@@ -21,15 +21,16 @@
                     <h4>Update Product</h4>
                   </div>
                   <div class="card-body">
-                    <form action="{{ route('admin.products.store', $product->id) }}" method="POST" enctype="multipart/form-data">
+                    <form action="{{ route('admin.products.update', $product->id) }}" method="POST" enctype="multipart/form-data">
                         @csrf
+                        @method('PUT')
                         <div class="form-group">
                             <label>Preview</label><br>
                             <img width="20%" src="{{ asset($product->thum_image) }}" alt="">
                         </div>
                         <div class="form-group">
                             <label>Image</label>
-                            <input id="image" type="file" name="image" class="form-control" value="">
+                            <input id="thum_image" type="file" name="thum_image" class="form-control" value="">
                         </div>
                         <div class="form-group">
                             <label>Name</label>
@@ -52,7 +53,9 @@
                                     <label for="sub_category">Sub-Category</label>
                                     <select id="sub_category" name="sub_category" class="form-control sub-category">
                                         <option value="">select</option>
-                                        //handled by ajax for select option
+                                        @foreach ($subcategories as $subcategory)
+                                        <option {{$product->sub_category_id == $subcategory->id ? 'selected': ''}} value="{{$subcategory->id}}">{{$subcategory->name}}</option>
+                                        @endforeach
                                     </select>
                                 </div>
                             </div>
@@ -61,7 +64,9 @@
                                     <label for="child_category">Child-Categorys</label>
                                     <select id="child_category" name="child_category" class="form-control child-category">
                                         <option value="">select</option>
-                                        //handled by ajax for select option
+                                        @foreach ($childcategories as $childcategory)
+                                        <option {{$product->child_category_id == $childcategory->id ? 'selected': ''}} value="{{$childcategory->id}}">{{$childcategory->name}}</option>
+                                        @endforeach
                                     </select>
                                 </div>
                             </div>
@@ -71,7 +76,7 @@
                             <select id="brand" name="brand" class="form-control">
                             <option value="">Select</option>
                             @foreach ($brands as $brand)
-                            <option value="{{$brand->id}}">{{$brand->name}}</option>
+                            <option {{$product->brand_id == $brand->id ? 'selected': ''}} value="{{$brand->id}}">{{$brand->name}}</option>
                             @endforeach
                             </select>
                         </div>
@@ -103,7 +108,7 @@
                         </div>
                         <div class="form-group">
                             <label>Stock Qty</label>
-                            <input type="number" id="qty" name="qty" class="form-control" value="{{$product->qty}}">
+                            <input type="number" id="qty" name="qty" class="form-control" value="{{$product->qyt}}">
                         </div>
                         <div class="form-group">
                             <label>Video Link</label>
@@ -160,6 +165,9 @@
         $(document).ready(function(){
             $('body').on('change', '.main-category', function(e){
                 // alert('hi');
+
+                // clear selection when user change category
+                $('.child-category').html('<option value="">Select</option>')
                 let id = $(this).val();
                 // console.log(id);
                 $.ajax({

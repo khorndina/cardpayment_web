@@ -107,11 +107,11 @@
                         </div>
                         <div class="form-group">
                             <label>Short Description</label>
-                            <textarea name="short_description" id="short_description" class="form-control"></textarea>
+                            <textarea name="short_description" id="short_description" class="form-control">{{old('short_description')}}</textarea>
                         </div>
                         <div class="form-group">
                             <label>Long Description</label>
-                            <textarea name="long_description" id="long_description" class="form-control summernote"></textarea>
+                            <textarea name="long_description" id="long_description" class="form-control summernote">{{old('long_description')}}</textarea>
                         </div>
                         <div class="form-group">
                             <label for="product_type">Product Type</label>
@@ -129,7 +129,7 @@
                         </div>
                         <div class="form-group">
                             <label>Seo Description</label>
-                            <textarea name="seo_description" id="seo_description" class="form-control"></textarea>
+                            <textarea name="seo_description" id="seo_description" class="form-control">{{old('long_description')}}</textarea>
                         </div>
                         <div class="form-group">
                             <label for="status">Status</label>
