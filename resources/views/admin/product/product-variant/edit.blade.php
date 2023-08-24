@@ -5,11 +5,11 @@
     <div class="main-content">
         <section class="section">
           <div class="section-header">
-            <h1>Product Variant</h1>
+            <h1>Product: {{$product->name}}</h1>
             <div class="section-header-breadcrumb">
               <div class="breadcrumb-item active"><a href="#">Dashboard</a></div>
               <div class="breadcrumb-item"><a href="{{ route('admin.products.index') }}">Product</a></div>
-              <div class="breadcrumb-item"><a href="#">Variant</a></div>
+              <div class="breadcrumb-item"><a href="{{ route('admin.product-variant.showtable', $product->id) }}">Variant</a></div>
               <div class="breadcrumb-item">Update Variant</div>
             </div>
           </div>

@@ -74,7 +74,9 @@ class ProductVariantontroller extends Controller
     {
         $productVariant = ProductVariant::findOrFail($id);
         // dd($productVariant);
-        return view('admin.product.product-variant.edit', compact('productVariant'));
+        $product = Product::findOrFail($productVariant->product_id);
+        // dd($product);
+        return view('admin.product.product-variant.edit', compact('productVariant', 'product'));
     }
 
     /**
@@ -106,5 +108,15 @@ class ProductVariantontroller extends Controller
         $productVariant->delete();
 
         return response(['status'=>'success', 'message'=>'Deleted Successfully!']);
+    }
+
+    public function changestatus(Request $request){
+        // dd($request->all());
+
+        $brands = ProductVariant::findOrFail($request->id);
+        $brands->status = $request->ischecked == "true" ? 1 : 0;
+        $brands->save();
+
+        return response(['message'=>'status has been updated!']);
     }
 }
