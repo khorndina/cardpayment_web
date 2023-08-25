@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 22, 2023 at 12:58 PM
+-- Generation Time: Aug 25, 2023 at 12:43 PM
 -- Server version: 10.4.22-MariaDB
 -- PHP Version: 8.2.7
 
@@ -142,7 +142,11 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (8, '2023_08_17_075424_create_child_categories_table', 5),
 (9, '2023_08_18_092835_create_brands_table', 6),
 (11, '2023_08_21_065148_create_vendors_table', 7),
-(13, '2023_08_21_091705_create_products_table', 8);
+(13, '2023_08_21_091705_create_products_table', 8),
+(14, '2023_08_23_034608_create_product_image_galleries_table', 9),
+(15, '2023_08_23_091842_create_product_variants_table', 10),
+(16, '2023_08_24_093524_create_product_variant_items_table', 11),
+(17, '2023_08_25_091257_add_shop_name_to_vendors_table', 12);
 
 -- --------------------------------------------------------
 
@@ -223,7 +227,78 @@ CREATE TABLE `products` (
 --
 
 INSERT INTO `products` (`id`, `name`, `slug`, `thum_image`, `vendor_id`, `category_id`, `sub_category_id`, `child_category_id`, `brand_id`, `qyt`, `short_description`, `long_description`, `video_link`, `sku`, `price`, `offer_price`, `offer_start_date`, `offer_end_date`, `product_type`, `status`, `is_approved`, `seo_title`, `seo_description`, `created_at`, `updated_at`) VALUES
-(1, 'EOS 5DS R', 'eos-5ds-r', 'uploards/media_64e47ad1e9db3.png', 1, 6, 7, 5, 3, 100, 'afsafasfafafaf', '<p>asfdsfdsfdsfdsfdsfdsfdsfdsfdsfdsfdsfdsfdsfdsfdsfdsfdsfdsfdsfdsfdsfd<br></p>', 'http://127.0.0.1:8000/admin/products/create', 'EOS 5DS R', 100, 99, '2023-08-22', '2023-08-22', 'new_arrival', 1, 1, 'afdssssssssssss', 'asfdddddddddddddd', '2023-08-22 02:07:29', '2023-08-22 02:07:29');
+(2, 'Sony ZV-1', 'sony-zv-1', 'uploards/media_64e574e98bfb4.jpg', 1, 6, 7, 6, 2, 10, 'Sony ZV-1 Digital Camera for Content Creators', '<p><span data-component-type=\"s-search-results\" class=\"rush-component s-latency-cf-section\" data-component-id=\"10\"><h2 class=\"a-size-mini a-spacing-none a-color-base s-line-clamp-2\"><span style=\"\"><span class=\"a-size-medium a-color-base a-text-normal\"><span style=\"font-weight: normal;\">Sony\r\n ZV-1 Digital Camera for Content Creators</span></span></span></h2></span></p>', 'http://127.0.0.1:8000/admin/products/create', 'ZV-1', 1500, 99, '2023-08-24', '2023-08-25', 'best_product', 0, 1, 'Sony ZV-1 Digital Camera for Content Creators', 'Sony ZV-1 Digital Camera for Content Creators', '2023-08-22 19:54:33', '2023-08-25 01:23:51');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `product_image_galleries`
+--
+
+CREATE TABLE `product_image_galleries` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `image` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `product_id` int(11) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `product_image_galleries`
+--
+
+INSERT INTO `product_image_galleries` (`id`, `image`, `product_id`, `created_at`, `updated_at`) VALUES
+(1, 'uploards/media_64e5946d1d1f1.png', 2, '2023-08-22 22:09:01', '2023-08-22 22:09:01'),
+(2, 'uploards/media_64e59501c0ef1.png', 2, '2023-08-22 22:11:29', '2023-08-22 22:11:29'),
+(16, 'uploards/media_64e6c1756b274.png', 2, '2023-08-23 19:33:25', '2023-08-23 19:33:25');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `product_variants`
+--
+
+CREATE TABLE `product_variants` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `product_id` int(11) NOT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `status` tinyint(1) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `product_variants`
+--
+
+INSERT INTO `product_variants` (`id`, `product_id`, `name`, `status`, `created_at`, `updated_at`) VALUES
+(1, 2, 'size', 1, '2023-08-23 03:46:38', '2023-08-23 03:46:38'),
+(2, 2, 'color', 1, '2023-08-23 19:56:59', '2023-08-24 02:33:53');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `product_variant_items`
+--
+
+CREATE TABLE `product_variant_items` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `product_variant_id` int(11) NOT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `price` double NOT NULL,
+  `is_default` tinyint(1) NOT NULL,
+  `status` tinyint(1) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `product_variant_items`
+--
+
+INSERT INTO `product_variant_items` (`id`, `product_variant_id`, `name`, `price`, `is_default`, `status`, `created_at`, `updated_at`) VALUES
+(6, 2, 'yellows', 5, 1, 0, '2023-08-24 23:03:09', '2023-08-25 00:15:32'),
+(7, 1, 'M', 1, 1, 1, '2023-08-25 00:04:23', '2023-08-25 00:04:23');
 
 -- --------------------------------------------------------
 
@@ -243,15 +318,6 @@ CREATE TABLE `sliders` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `sliders`
---
-
-INSERT INTO `sliders` (`id`, `banner`, `type`, `title`, `starting_price`, `button_url`, `serail`, `status`, `created_at`, `updated_at`) VALUES
-(1, 'uploards/media_64dc4b6b87b9b.jpg', 'electronic', 'watch', 500, 'http://127.0.0.1:8000/admin/slider/create', 1, 1, '2023-08-11 00:21:47', '2023-08-15 21:07:07'),
-(5, 'uploards/media_64db471f874df.jpg', 'technology', 'smart phone', 1200, 'http://localhost:8888/phpmyadmin/', 2, 1, '2023-08-15 02:36:31', '2023-08-15 21:05:50'),
-(6, 'uploards/media_64db4c2ddfceb.jpg', 'promotion', 'Top Sale Products', 168, 'http://127.0.0.1:8000/admin/slider/create', 4, 1, '2023-08-15 02:58:05', '2023-08-15 03:10:59');
 
 -- --------------------------------------------------------
 
@@ -310,8 +376,8 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `name`, `username`, `image`, `phone`, `address_id`, `email`, `role`, `status`, `email_verified_at`, `password`, `remember_token`, `created_at`, `updated_at`) VALUES
-(1, 'Admin9999', 'Adminuser', '/uploards/1766691378-2admin_img.png', '012345678', 1, 'admin@gmail.com', 'admin', 'active', NULL, '$2y$10$Liinufadn1xvDTmNkCDsYugqu0CrezQ3YRRMgcb9XB.h49KZxopi2', 'nah8EaxOSsSIQdbu0jgl5rwZJNpml0JEf4AYGLvNDz7EomBcD0dE48F2kksB', NULL, '2023-08-07 20:22:02'),
-(2, 'vendor99', 'vendoruser', '/uploards/139040257-vendor1.png', '012345679', 2, 'vendor@gmail.com', 'vendor', 'active', NULL, '$2y$10$CL/HBtGrr.RnE2koEehwNOEDAd7F8wADVIn/p3PPXjGiF.u/hz.r6', 'TndXJyxTvQMcNEzOqkxp8Asb6QdhuAFxysK6QV2NJF0jo6GIFEnpDeXhduMV', NULL, '2023-08-09 01:36:22'),
+(1, 'Admin9999', 'Adminuser', '/uploards/1766691378-2admin_img.png', '012345678', 1, 'admin@gmail.com', 'admin', 'active', NULL, '$2y$10$Liinufadn1xvDTmNkCDsYugqu0CrezQ3YRRMgcb9XB.h49KZxopi2', 'Ht0b2I69pco6U3zBVCGHBZdVFAuMcU3bIXQAcLOSPNn71Puis1MO0mF296Vr', NULL, '2023-08-07 20:22:02'),
+(2, 'vendor99', 'vendoruser', '/uploards/139040257-vendor1.png', '012345679', 2, 'vendor@gmail.com', 'vendor', 'active', NULL, '$2y$10$CL/HBtGrr.RnE2koEehwNOEDAd7F8wADVIn/p3PPXjGiF.u/hz.r6', 'S6QdIJJC791JpmAzJT85X0t7EJW6yVLpBWQI2In4XieTIl4MEIORAIHfwRsz', NULL, '2023-08-09 01:36:22'),
 (3, 'user', 'user', 'example.txt', '012345699', 3, 'user@gmail.com', 'user', 'active', NULL, '$2y$10$/Svx2aTvnBTI8EvheJN.0.go1F6OAQCH.R7eloj9ZfXQun1REUkcu', NULL, NULL, NULL),
 (4, 'user test88', NULL, '/uploards/1221134349-admin_img.png', NULL, NULL, 'usertest88@gmail.com', 'user', 'active', NULL, '$2y$10$MjQ8HqCbaP.c4fa7P81Q0eP/pWYDKIVvz8GUdpGgvnLtu.yhx0JQ.', NULL, '2023-08-08 01:39:50', '2023-08-09 01:00:33'),
 (5, 'test user2', NULL, NULL, NULL, NULL, 'user2@gmai.com', 'user', 'active', NULL, '$2y$10$ZW6FO46/o7tv9TMVYjryBOV/6wz36cTU4OSg3ScaUvXODbnTxbDwW', NULL, '2023-08-17 20:02:23', '2023-08-17 20:02:23');
@@ -334,15 +400,17 @@ CREATE TABLE `vendors` (
   `tw_link` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `insta_link` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `shop_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `vendors`
 --
 
-INSERT INTO `vendors` (`id`, `user_id`, `banner`, `phone`, `email`, `address`, `description`, `fb_link`, `tw_link`, `insta_link`, `created_at`, `updated_at`) VALUES
-(1, 1, 'uploards/media_64e31fb604346.jpg', '01234567800', 'admin@gmail.com', 'Phnom Penh ppp', 'shop description ppp<br>', 'https://facebook.com', NULL, NULL, '2023-08-21 00:38:15', '2023-08-21 01:26:30');
+INSERT INTO `vendors` (`id`, `user_id`, `banner`, `phone`, `email`, `address`, `description`, `fb_link`, `tw_link`, `insta_link`, `created_at`, `updated_at`, `shop_name`) VALUES
+(1, 1, 'uploards/media_64e872158c237.png', '01234567800', 'admin@gmail.com', 'Phnom Penh ppp', 'shop description ppp<br>', 'https://facebook.com', 'https://facebook.com', 'https://facebook.com', '2023-08-21 00:38:15', '2023-08-25 02:19:17', 'Admin Shop'),
+(2, 2, 'uploards/123456.jpg', '0123456789', 'vendor@gmail.com', 'Phnom Penh', 'vendor shop description', NULL, NULL, NULL, '2023-08-25 02:57:38', '2023-08-25 02:57:38', 'Vendor Shop');
 
 --
 -- Indexes for dumped tables
@@ -397,6 +465,24 @@ ALTER TABLE `personal_access_tokens`
 -- Indexes for table `products`
 --
 ALTER TABLE `products`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `product_image_galleries`
+--
+ALTER TABLE `product_image_galleries`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `product_variants`
+--
+ALTER TABLE `product_variants`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `product_variant_items`
+--
+ALTER TABLE `product_variant_items`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -456,7 +542,7 @@ ALTER TABLE `failed_jobs`
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT for table `personal_access_tokens`
@@ -468,7 +554,25 @@ ALTER TABLE `personal_access_tokens`
 -- AUTO_INCREMENT for table `products`
 --
 ALTER TABLE `products`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT for table `product_image_galleries`
+--
+ALTER TABLE `product_image_galleries`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+
+--
+-- AUTO_INCREMENT for table `product_variants`
+--
+ALTER TABLE `product_variants`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+
+--
+-- AUTO_INCREMENT for table `product_variant_items`
+--
+ALTER TABLE `product_variant_items`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `sliders`
@@ -492,7 +596,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `vendors`
 --
 ALTER TABLE `vendors`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
