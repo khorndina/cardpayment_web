@@ -1,26 +1,18 @@
-@extends('admin.layout.master')
+@extends('vendor.layouts.master')
 
 @section('content')
-    <!-- Main Content -->
-    <div class="main-content">
-        <section class="section">
-          <div class="section-header">
-            <h1>Vendor Profile</h1>
-            {{-- <div class="section-header-breadcrumb">
-              <div class="breadcrumb-item active"><a href="#">Dashboard</a></div>
-              <div class="breadcrumb-item"><a href="#">Components</a></div>
-              <div class="breadcrumb-item">Table</div>
-            </div> --}}
-          </div>
+    <section id="wsus__dashboard">
+    <div class="container-fluid">
 
-          <div class="section-body">
-            <div class="row">
-              <div class="col-12">
-                <div class="card">
-                  <div class="card-header">
-                    <h4>Create Vendor Profile</h4>
-                  </div>
-                  <div class="card-body">
+        @include('vendor.layouts.sidebar')
+
+      <div class="row">
+        <div class="col-xl-9 col-xxl-10 col-lg-9 ms-auto">
+          <div class="dashboard_content mt-2 mt-md-0">
+            <h3><i class="far fa-user"></i> profile</h3>
+            <div class="wsus__dashboard_profile">
+                <div class="wsus__input">
+                    <h4>basic information</h4>
                     <form action="{{ route('admin.vendor-profile.store') }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         <div class="form-group">
@@ -31,10 +23,6 @@
                             <label>Banner Image</label>
                             <input id="banner" type="file" name="banner" class="form-control">
                         </div>
-                        {{-- <div class="form-group">
-                            <label>User ID</label>
-                            <input type="text" id="user_id" name="user_id" class="form-control" value="{{$profile->user_id}}">
-                        </div> --}}
                         <div class="form-group">
                             <label>Shop Name</label>
                             <input type="text" id="shop_name" name="shop_name" class="form-control" value="{{$profile->shop_name}}">
@@ -51,6 +39,7 @@
                             <label>Address</label>
                             <input type="text" id="address" name="address" class="form-control" value="{{$profile->address}}">
                         </div>
+                        <div>
                             <label>Description</label>
                             <textarea class="summernote" name="description" id="description" cols="30" rows="10">{{$profile->description}}</textarea>
                         </div>
@@ -69,12 +58,12 @@
                         <div class="card-footer">
                             <button class="btn btn-primary">Update</button>
                         </div>
-                    </form>
-                  </div>
+                        </form>
+                    </div>
                 </div>
-              </div>
             </div>
           </div>
-        </section>
+        </div>
       </div>
+  </section>
 @endsection

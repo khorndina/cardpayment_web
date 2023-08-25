@@ -22,6 +22,9 @@
   <link rel="stylesheet" href="{{ asset('frontend/css/jquery.classycountdown.css') }}">
   <link rel="stylesheet" href="{{ asset('frontend/css/venobox.min.css') }}">
 
+  {{-- add more css style --}}
+  <link rel="stylesheet" href="{{ asset('backend/assets/modules/summernote/summernote-bs4.css') }}">
+
   {{-- toastr allert --}}
   <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
 
@@ -103,6 +106,9 @@
   {{-- toastr --}}
   <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
+  {{-- add more style for texarea --}}
+  <script src="{{ asset('backend/assets/modules/summernote/summernote-bs4.js') }}"></script>
+
   <!--classycountdown js-->
   <script src="{{ asset('frontend/js/jquery.classycountdown.js') }}"></script>
 
@@ -116,6 +122,10 @@
             toastr.error("{{$error}}")
         @endforeach
     @endif
+
+    $('.summernote').summernote({
+        height: 150
+    })
   </script>
 
 </body>
