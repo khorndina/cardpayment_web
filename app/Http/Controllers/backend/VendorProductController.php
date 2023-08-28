@@ -8,6 +8,8 @@ use App\Models\Brand;
 use App\Models\Category;
 use App\Models\ChildCategory;
 use App\Models\Product;
+use App\Models\ProductImageGallery;
+use App\Models\ProductVariant;
 use App\Models\subCategory;
 use App\Traits\ImageUploadTrait;
 use Illuminate\Http\Request;
@@ -192,7 +194,32 @@ class VendorProductController extends Controller
      */
     public function destroy(string $id)
     {
-        dd($id);
+        $product = Product::findOrFail($id);
+        // dd($product);
+
+        /** delete product image gallery from storage */
+        $productImageGallerys = ProductImageGallery::where('product_id', $product->id)->get();
+        // dd($productImageGallery);
+        foreach ($productImageGallerys as $productImageGallery) {
+            $this->deleteImage($productImageGallery->image);
+            $productImageGallery->delete();
+        }
+
+        /**delete product variant under that product */
+        $productVariants = ProductVariant::where('product_id', $product->id)->get();
+        // dd($productVariants);
+        foreach ($productVariants as $productVariant) {
+            $productVariant->productVariantItems()->delete();
+            $productVariant->delete();
+        }
+
+        /**delete main product image from storage */
+        $this->deleteImage($product->thum_image);
+
+        /**Delate product from product table */
+        $product->delete();
+
+        return response(['status'=>'success', 'message'=>'Deleted Successfully!']);
     }
 
     /**load sub-Category from database */

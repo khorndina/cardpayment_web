@@ -26,15 +26,25 @@ class VendorProductDataTable extends DataTable
             ->addColumn('action', function($query){
                 $EditBtn = "<a href='".route('vendor.products.edit', $query->id)."' class='btn btn-primary ml-2'> Edit </a>";
                 $DeleteBtn = "<a href='".route('vendor.products.destroy', $query->id)."' class='btn btn-danger ml-2 delete-item'> Delete </a>";
-                $settingBtn ='<div class="dropdown d-inline dropleft">
-                                <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                // $settingBtn ='<div class="dropdown d-inline dropleft">
+                //                 <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                //                 <i class="fas fa-cog"></i>
+                //                 </button>
+                //                 <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 28px, 0px); top: 0px; left: 0px; will-change: transform;">
+                //                 <a class="dropdown-item has-icon" href="'.route('admin.product-image-gallery.showtable', $query->id).'"><i class="far fa-heart"></i>Image Gallery</a>
+                //                 <a class="dropdown-item has-icon" href="'.route('admin.product-variant.showtable', $query->id).'"><i class="far fa-file"></i>Product Variant</a>
+                //                 <a class="dropdown-item has-icon" href="#"><i class="far fa-clock"></i> Something else here</a>
+                //                 </div>
+                //             </div>';
+                $settingBtn = '<div class="btn-group dropstart d-inline">
+                                <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                                 <i class="fas fa-cog"></i>
                                 </button>
-                                <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 28px, 0px); top: 0px; left: 0px; will-change: transform;">
-                                <a class="dropdown-item has-icon" href="'.route('admin.product-image-gallery.showtable', $query->id).'"><i class="far fa-heart"></i>Image Gallery</a>
-                                <a class="dropdown-item has-icon" href="'.route('admin.product-variant.showtable', $query->id).'"><i class="far fa-file"></i>Product Variant</a>
-                                <a class="dropdown-item has-icon" href="#"><i class="far fa-clock"></i> Something else here</a>
-                                </div>
+                                <ul class="dropdown-menu">
+                                <li><a class="dropdown-item has-icon" href="'.route('vendor.product-image-gallery.showtable', $query->id).'">Image Gallery</a></li>
+                                <li><a class="dropdown-item has-icon" href="'.route('admin.product-variant.showtable', $query->id).'"></i>Product Variant</a></li>
+                                <li><a class="dropdown-item has-icon" href="#"><i class="far fa-clock"></i> Something else here</a></li>
+                                </ul>
                             </div>';
                 return $EditBtn.$DeleteBtn.$settingBtn;
             })
