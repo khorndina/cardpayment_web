@@ -24,6 +24,15 @@
 
   {{-- add more css style --}}
   <link rel="stylesheet" href="{{ asset('backend/assets/modules/summernote/summernote-bs4.css') }}">
+  {{-- yajra datatables --}}
+  <link rel="stylesheet" href="//cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+  {{-- <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css"> --}}
+
+  {{-- date picker for form input select date --}}
+  <link rel="stylesheet" href="{{ asset('backend/assets/modules/bootstrap-daterangepicker/daterangepicker.css') }}">
+
+  {{-- sweet alert --}}
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
   {{-- toastr allert --}}
   <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
@@ -109,6 +118,14 @@
   {{-- add more style for texarea --}}
   <script src="{{ asset('backend/assets/modules/summernote/summernote-bs4.js') }}"></script>
 
+   {{-- yajra datatables --}}
+   <script src="//cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+   {{-- <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script> --}}
+
+   {{-- date picker for form input select date --}}
+   <script src="{{ asset('backend/assets/modules/moment.min.js') }}"></script>
+   <script src="{{ asset('backend/assets/modules/bootstrap-daterangepicker/daterangepicker.js') }}"></script>
+
   <!--classycountdown js-->
   <script src="{{ asset('frontend/js/jquery.classycountdown.js') }}"></script>
 
@@ -126,7 +143,19 @@
     $('.summernote').summernote({
         height: 150
     })
+
+    /** Date Rank Picker*/
+    $('.datepicker').daterangepicker({
+        locale: {
+            format: 'YYYY-MM-DD'
+        },
+        singleDatePicker: true
+    })
+
   </script>
+
+  {{-- yajra datatables --}}
+  @stack('scripts')
 
 </body>
 

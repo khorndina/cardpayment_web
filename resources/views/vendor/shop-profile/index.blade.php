@@ -13,7 +13,7 @@
             <div class="wsus__dashboard_profile">
                 <div class="wsus__input">
                     <h4>basic information</h4>
-                    <form action="{{ route('admin.vendor-profile.store') }}" method="POST" enctype="multipart/form-data">
+                    <form action="{{ route('vendor.shop-profile.store') }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         <div class="form-group">
                             <label>Preview</label><br>
