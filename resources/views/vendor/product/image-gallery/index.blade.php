@@ -8,9 +8,16 @@
         <div class="row">
             <div class="col-xl-9 col-xxl-10 col-lg-9 ms-auto">
                 <div class="dashboard_content mt-2 mt-md-0">
+                    <nav aria-label="breadcrumb" class="topnav-right">
+                        <ol class="breadcrumb">
+                          <li class="breadcrumb-item"><a href="ro">Dashboard</a></li>
+                          <li class="breadcrumb-item"><a href="{{ route('vendor.products.index') }}">Product</a></li>
+                          <li class="breadcrumb-item active" aria-current="page">Image-Gallery</li>
+                        </ol>
+                    </nav>
                     <h4><i class="fab fa-product-hunt"></i> {{$product->name}}</h4>
-                    <h5 class="mt-md-2">Product Image-Gallery</h5>
-                    <div class="wsus__dashboard_profile mt-2">
+                    <h5 class="mt-md-3">Product Image-Gallery</h5>
+                    <div class="wsus__dashboard_profile mt-3">
                         <div class="wsus__dash_pro_area">
                             <div>
                                 <form action="{{ route('vendor.product-image-gallery.store') }}" enctype="multipart/form-data" method="POST">

@@ -9482,3 +9482,10 @@ a:not([href]):not([class]):hover {
 .delete-item{
     margin-left: 5px;
 }
+.btn-margin-right{
+    margin-right: 5px;
+    color: #fff;
+}
+.topnav-right {
+    float: right;
+}

@@ -234,4 +234,13 @@ class VendorProductController extends Controller
         return $subcategories;
     }
 
+    /**Change status of product */
+    public function changestatus(Request $request){
+        $product = Product::findOrFail($request->id);
+        $product->status = $request->ischecked == "false" ? 0 : 1;
+        $product->save();
+
+        return response(['message'=>'status has been updated!']);
+    }
+
 }

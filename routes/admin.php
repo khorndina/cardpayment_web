@@ -5,11 +5,13 @@ use App\Http\Controllers\backend\AdminVendorProfileController;
 use App\Http\Controllers\backend\BrandController;
 use App\Http\Controllers\backend\CategoryController;
 use App\Http\Controllers\backend\ChildCategoryController;
+use App\Http\Controllers\backend\FlashSaleController;
 use App\Http\Controllers\backend\ProductController;
 use App\Http\Controllers\backend\ProductImageGalleryController;
 use App\Http\Controllers\backend\ProductVariantItemController;
 use App\Http\Controllers\backend\ProductVariantontroller;
 use App\Http\Controllers\backend\ProfileController;
+use App\Http\Controllers\backend\SellerProductController;
 use App\Http\Controllers\backend\SliderController;
 use App\Http\Controllers\backend\SubCategoryController;
 use Illuminate\Support\Facades\Route;
@@ -71,3 +73,11 @@ Route::put('product-variant-item-update/{variantItemId}', [ProductVariantItemCon
 Route::delete('product-variant-item-destroy/{variantItemId}', [ProductVariantItemController::class, 'destroy'])->name('product-variant-item.destroy');
 Route::put('product-variant-item/change-status', [ProductVariantItemController::class, 'changestatus'])->name('product-variant-item.changestatus');
 
+// Seller Product route
+Route::get('seller-products', [SellerProductController::class, 'index'])->name('seller-products.index');
+Route::get('seller-pending-products', [SellerProductController::class, 'pendingProduct'])->name('seller-pending-products.pendingProduct');
+Route::put('approve-pending-product', [SellerProductController::class, 'isApprove'])->name('approve-pending-product');
+
+// Flash Slae route
+Route::get('flash-sale', [FlashSaleController::class, 'index'])->name('flash-sale.index');
+Route::post('flash-sale', [FlashSaleController::class, 'update'])->name('flash-sale.update');

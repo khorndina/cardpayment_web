@@ -8,6 +8,7 @@ use App\Models\Product;
 use App\Models\ProductImageGallery;
 use App\Traits\ImageUploadTrait;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class VendorProductImageGalleryController extends Controller
 {
@@ -25,6 +26,12 @@ class VendorProductImageGalleryController extends Controller
     {
         $product = Product::find($id);
         // var_dump($product->id);
+
+        /** Check is this user is Owner of product? */
+        if($product->vendor_id != Auth::user()->vendor->id){
+            abort(404);
+        }
+
         return $dataTable->with('productId', $id)->render('vendor.product.image-gallery.index', compact('product'));
     }
 
@@ -92,7 +99,12 @@ class VendorProductImageGalleryController extends Controller
     public function destroy(string $id)
     {
         $productImageGallery = ProductImageGallery::findOrFail($id);
-        // dd($product);
+        // dd($productImageGallery);
+
+        /** Check is this user is Owner of product? */
+        if($productImageGallery->product->vendor_id != Auth::user()->vendor->id){
+            abort(404);
+        }
 
         // delete slider from database
         $this->deleteImage($productImageGallery->image);

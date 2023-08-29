@@ -42,7 +42,7 @@ class VendorProductDataTable extends DataTable
                                 </button>
                                 <ul class="dropdown-menu">
                                 <li><a class="dropdown-item has-icon" href="'.route('vendor.product-image-gallery.showtable', $query->id).'">Image Gallery</a></li>
-                                <li><a class="dropdown-item has-icon" href="'.route('admin.product-variant.showtable', $query->id).'"></i>Product Variant</a></li>
+                                <li><a class="dropdown-item has-icon" href="'.route('vendor.product-variant.showtable', $query->id).'"></i>Product Variant</a></li>
                                 <li><a class="dropdown-item has-icon" href="#"><i class="far fa-clock"></i> Something else here</a></li>
                                 </ul>
                             </div>';
@@ -73,26 +73,27 @@ class VendorProductDataTable extends DataTable
             })
             ->addColumn('status', function($query){
                 if($query->status == 0){
-                    // $status = '<label class="custom-switch mt-2">
-                    //         <input type="checkbox" name="custome-switch-checkbox" data-id="'.$query->id.'" class="custom-switch-input change-status">
-                    //         <span class="custom-switch-indicator"></span>
-                    //     </label>';
                     $status = '<div class="form-check form-switch">
-                                    <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault">
+                                    <input class="form-check-input change-status" type="checkbox" role="switch" id="flexSwitchCheckDefault" data-id="'.$query->id.'">
                                 </div>';
                     return $status;
                 }else{
-                    // $status = '<label class="custom-switch mt-2">
-                    //                 <input type="checkbox" name="custome-switch-checkbox" data-id="'.$query->id.'" class="custom-switch-input change-status" checked>
-                    //                 <span class="custom-switch-indicator"></span>
-                    //             </label>';
                     $status = '<div class="form-check form-switch">
-                                    <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" checked>
+                                    <input class="form-check-input change-status" type="checkbox" role="switch" id="flexSwitchCheckDefault" data-id="'.$query->id.'" checked>
                                 </div>';
                     return $status;
                 }
             })
-            ->rawColumns(['action', 'status', 'produc_image', 'product_type'])
+            ->addColumn('approved', function($query){
+                if($query->is_approved == 1){
+                    $Approved = '<i class="badge bg-success">Approved</i>';
+                    return $Approved;
+                }else{
+                    $Approved = '<i class="badge bg-danger">Not Approve</i>';
+                    return $Approved;
+                }
+            })
+            ->rawColumns(['action', 'status', 'produc_image', 'product_type', 'approved'])
             ->setRowId('id');
     }
 
@@ -137,9 +138,10 @@ class VendorProductDataTable extends DataTable
             Column::make('id')->width(50),
             Column::make('produc_image')->width(200),
             Column::make('name'),
-            Column::make('price'),
-            Column::make('product_type'),
-            Column::make('status'),
+            Column::make('price')->width(150),
+            Column::make('product_type')->width(150),
+            Column::make('approved')->width(150),
+            Column::make('status')->width(150),
             Column::computed('action')
                   ->exportable(false)
                   ->printable(false)
