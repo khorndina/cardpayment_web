@@ -2,9 +2,9 @@
     <div class=" container">
         <div class="row">
             <div class="col-xl-12">
-                <div class="offer_time" style="background: url(images/flash_sell_bg.jpg)">
+                <div class="offer_time" style="background: url({{asset('frontend/images/flash_sell_bg.jpg')}})">
                     <div class="wsus__flash_coundown">
-                        <span class=" end_text">flash sell</span>
+                        <span class=" end_text">flash Sale</span>
                         <div class="simply-countdown simply-countdown-one"></div>
                         <a class="common_btn" href="#">see more <i class="fas fa-caret-right"></i></a>
                     </div>
@@ -42,7 +42,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-xl-3 col-sm-6 col-lg-4">
+            {{-- <div class="col-xl-3 col-sm-6 col-lg-4">
                 <div class="wsus__product_item">
                     <span class="wsus__new">New</span>
                     <a class="wsus__pro_link" href="product_details.html">
@@ -158,8 +158,20 @@
                         <a class="add_cart" href="#">add to cart</a>
                     </div>
                 </div>
-            </div>
-
+            </div> --}}
         </div>
     </div>
 </section>
+
+@push('scripts')
+    <script>
+        $(document).ready(function(){
+            simplyCountdown('.simply-countdown-one', {
+                year: {{date('Y', strtotime($flashSale->end_date))}},
+                month: {{date('m', strtotime($flashSale->end_date))}},
+                day: {{date('d', strtotime($flashSale->end_date))}},
+                enableUtc: true
+            });
+        })
+    </script>
+@endpush

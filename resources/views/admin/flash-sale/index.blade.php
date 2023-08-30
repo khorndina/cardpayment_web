@@ -25,7 +25,7 @@
                     <div>
                         <div class="form-group mt-3">
                             <label>End Date</label>
-                            <input type="text" id="end_date" name="end_date" class="form-control datepicker" value="{{old('end_date')}}">
+                            <input type="text" id="end_date" name="end_date" class="form-control datepicker" value="{{$flashSaleEndDate->end_date}}">
                         </div>
                     </div>
                     <div class="card-footer">
@@ -44,39 +44,43 @@
                   <div class="card-header">
                     <h4>Add Flash Sale Product</h4>
                   </div>
-                  <div class="form-group">
-                    <label for="product">Add Product</label>
-                    <select id="product" name="product" class="form-control">
-                        <option value="">select</option>
-                        <option value="1">Active</option>
-                        <option value="0">Inactive</option>
-                    </select>
-                </div>
-                <div class="row">
-                    <div class="col-md-6">
+                    <form action="{{ route('admin.flash-sale.add-product') }}" method="POST">
+                        @csrf
                         <div class="form-group">
-                            <label for="show_at_home">Show at Home Page?</label>
-                            <select id="show_at_home" name="show_at_home" class="form-control main-category">
+                            <label for="product">Add Product</label>
+                            <select id="product" name="product" class="form-control select2">
                                 <option value="">select</option>
-                                <option value="1">Yes</option>
-                                <option value="0">No</option>
+                                @foreach ($products as $product)
+                                    <option value="{{$product->id}}">{{$product->name}}</option>
+                                @endforeach
                             </select>
                         </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label for="status">Status</label>
-                            <select id="status" name="status" class="form-control sub-category">
-                                <option value="">select</option>
-                                <option value="1">Active</option>
-                                <option value="0">Inactive</option>
-                            </select>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="show_at_home">Show at Home Page?</label>
+                                    <select id="show_at_home" name="show_at_home" class="form-control show-at-home">
+                                        <option value="">select</option>
+                                        <option value="1">Yes</option>
+                                        <option value="0">No</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="status">Status</label>
+                                    <select id="status" name="status" class="form-control change-status">
+                                        <option value="">select</option>
+                                        <option value="1">Active</option>
+                                        <option value="0">Inactive</option>
+                                    </select>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
-                <div class="card-footer">
-                    <button class="btn btn-primary">Save</button>
-                </div>
+                        <div class="card-footer">
+                            <button class="btn btn-primary">Save</button>
+                        </div>
+                    </form>
                 </div>
               </div>
             </div>
@@ -100,7 +104,7 @@
       </div>
 @endsection
 
-{{-- @push('scripts')
+@push('scripts')
   {{ $dataTable->scripts(attributes: ['type' => 'module']) }}
 
   <script>
@@ -111,7 +115,30 @@
 		let id = $(this).data('id');
         // console.log(id); /**show on console when inspec*/
         $.ajax({
-                url: "{{route('admin.products.changestatus')}}",
+                url: "{{route('admin.flash-sale.changestatus')}}",
+                method: 'PUT',
+                data:{
+                    ischecked:ischecked,
+                    id:id
+                },
+                success: function(data){
+                    // console.log(data);
+                    toastr.success(data.message);
+                },
+                error:function(xhr, status, error){
+                    console.log(error);
+                }
+            })
+	    })
+
+        // update show at home
+        $('body').on('click', '.show-at-home', function(){
+        // alert('helelll');
+		let ischecked = $(this).is(':checked');
+		let id = $(this).data('id');
+        // console.log(id); /**show on console when inspec*/
+        $.ajax({
+                url: "{{route('admin.flash-sale.show-at-home')}}",
                 method: 'PUT',
                 data:{
                     ischecked:ischecked,
@@ -128,4 +155,4 @@
 	    })
     })
   </script>
-@endpush --}}
+@endpush
