@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 28, 2023 at 12:46 PM
+-- Generation Time: Aug 30, 2023 at 01:03 PM
 -- Server version: 10.4.22-MariaDB
 -- PHP Version: 8.2.7
 
@@ -122,6 +122,52 @@ CREATE TABLE `failed_jobs` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `flash_sales`
+--
+
+CREATE TABLE `flash_sales` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `end_date` date NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `flash_sales`
+--
+
+INSERT INTO `flash_sales` (`id`, `end_date`, `created_at`, `updated_at`) VALUES
+(1, '2023-09-01', '2023-08-29 19:26:08', '2023-08-29 19:29:13');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `flash_sale_items`
+--
+
+CREATE TABLE `flash_sale_items` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `product_id` int(11) NOT NULL,
+  `flash_sale_id` int(11) NOT NULL,
+  `show_at_home` tinyint(1) NOT NULL,
+  `status` tinyint(1) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `flash_sale_items`
+--
+
+INSERT INTO `flash_sale_items` (`id`, `product_id`, `flash_sale_id`, `show_at_home`, `status`, `created_at`, `updated_at`) VALUES
+(2, 2, 1, 1, 1, '2023-08-29 21:05:52', '2023-08-29 21:05:52'),
+(3, 5, 1, 1, 1, '2023-08-29 21:06:06', '2023-08-30 00:43:29'),
+(4, 7, 1, 1, 1, '2023-08-29 23:41:20', '2023-08-29 23:41:20'),
+(5, 6, 1, 1, 1, '2023-08-30 00:05:18', '2023-08-30 00:05:18');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `migrations`
 --
 
@@ -150,7 +196,9 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (14, '2023_08_23_034608_create_product_image_galleries_table', 9),
 (15, '2023_08_23_091842_create_product_variants_table', 10),
 (16, '2023_08_24_093524_create_product_variant_items_table', 11),
-(17, '2023_08_25_091257_add_shop_name_to_vendors_table', 12);
+(17, '2023_08_25_091257_add_shop_name_to_vendors_table', 12),
+(18, '2023_08_29_101639_create_flash_sales_table', 13),
+(19, '2023_08_29_101650_create_flash_sale_items_table', 13);
 
 -- --------------------------------------------------------
 
@@ -231,8 +279,10 @@ CREATE TABLE `products` (
 --
 
 INSERT INTO `products` (`id`, `name`, `slug`, `thum_image`, `vendor_id`, `category_id`, `sub_category_id`, `child_category_id`, `brand_id`, `qyt`, `short_description`, `long_description`, `video_link`, `sku`, `price`, `offer_price`, `offer_start_date`, `offer_end_date`, `product_type`, `status`, `is_approved`, `seo_title`, `seo_description`, `created_at`, `updated_at`) VALUES
-(2, 'Sony ZV-1', 'sony-zv-1', 'uploards/media_64e574e98bfb4.jpg', 1, 6, 7, 6, 2, 10, 'Sony ZV-1 Digital Camera for Content Creators', '<p><span data-component-type=\"s-search-results\" class=\"rush-component s-latency-cf-section\" data-component-id=\"10\"><h2 class=\"a-size-mini a-spacing-none a-color-base s-line-clamp-2\"><span style=\"\"><span class=\"a-size-medium a-color-base a-text-normal\"><span style=\"font-weight: normal;\">Sony\r\n ZV-1 Digital Camera for Content Creators</span></span></span></h2></span></p>', 'http://127.0.0.1:8000/admin/products/create', 'ZV-1', 1500, 99, '2023-08-24', '2023-08-25', 'best_product', 0, 1, 'Sony ZV-1 Digital Camera for Content Creators', 'Sony ZV-1 Digital Camera for Content Creators', '2023-08-22 19:54:33', '2023-08-25 01:23:51'),
-(5, 'LUMIX FZ300K1', 'lumix-fz300k1', 'uploards/media_64ec5bd0672d7.jpg', 2, 6, 7, 7, 4, 11, 'LUMIX FZ300K Digital Camera with 24X 25-600mm F2.8 LEICA DC VARIO-ELMAR Lens1', '<p><span style=\"color: rgb(113, 113, 113); font-family: DINOT, Arial, Helvetica, sans-serif;\">The Panasonic LUMIX DMC FZ300K long zoom digital camera offers 4K video features and a Leica DC lens with 24x zoom and a bright F2.8 aperture across the entire zoom range. The 4K photo function can be used in three different modes, and 4K video delivers a far more intense viewing experience that is four times larger than full HD, resulting in a much higher level of detail. Built into a splash proof/dustproof rugged camera body.1</span><br></p>', 'http://127.0.0.1:8000/admin/products/create1', 'DMC-FZ300K1', 9991, 991, '2023-08-30', '2023-08-31', 'top_product', 1, 1, 'LUMIX FZ300K Digital Camera with 24X 25-600mm F2.8 LEICA DC VARIO-ELMAR Lens1', '<p><span style=\"color: rgb(113, 113, 113); font-family: DINOT, Arial, Helvetica, sans-serif;\">The Panasonic LUMIX DMC FZ300K long zoom digital camera offers 4K video features and a Leica DC lens with 24x zoom and a bright F2.8 aperture across the entire zoom range. The 4K photo function can be used in three different modes, and 4K video delivers a far more intense viewing experience that is four times larger than full HD, resulting in a much higher level of detail. Built into a splash proof/dustproof rugged camera body1.</span><br></p>', '2023-08-27 23:50:29', '2023-08-28 01:33:20');
+(2, 'Sony ZV-1', 'sony-zv-1', 'uploards/media_64e574e98bfb4.jpg', 1, 6, 7, 6, 2, 10, 'Sony ZV-1 Digital Camera for Content Creators', '<p><span data-component-type=\"s-search-results\" class=\"rush-component s-latency-cf-section\" data-component-id=\"10\"><h2 class=\"a-size-mini a-spacing-none a-color-base s-line-clamp-2\"><span style=\"\"><span class=\"a-size-medium a-color-base a-text-normal\"><span style=\"font-weight: normal;\">Sony\r\n ZV-1 Digital Camera for Content Creators</span></span></span></h2></span></p>', 'http://127.0.0.1:8000/admin/products/create', 'ZV-1', 1500, 99, '2023-08-24', '2023-08-25', 'best_product', 1, 1, 'Sony ZV-1 Digital Camera for Content Creators', 'Sony ZV-1 Digital Camera for Content Creators', '2023-08-22 19:54:33', '2023-08-28 23:34:57'),
+(5, 'LUMIX FZ300K1', 'lumix-fz300k1', 'uploards/media_64ec5bd0672d7.jpg', 2, 6, 7, 7, 4, 11, 'LUMIX FZ300K Digital Camera with 24X 25-600mm F2.8 LEICA DC VARIO-ELMAR Lens1', '<p><span style=\"color: rgb(113, 113, 113); font-family: DINOT, Arial, Helvetica, sans-serif;\">The Panasonic LUMIX DMC FZ300K long zoom digital camera offers 4K video features and a Leica DC lens with 24x zoom and a bright F2.8 aperture across the entire zoom range. The 4K photo function can be used in three different modes, and 4K video delivers a far more intense viewing experience that is four times larger than full HD, resulting in a much higher level of detail. Built into a splash proof/dustproof rugged camera body.1</span><br></p>', 'https://www.youtube.com/watch?v=nP_uy6xeEaM', 'DMC-FZ300K1', 9991, 991, '2023-08-30', '2023-08-31', 'top_product', 1, 1, 'LUMIX FZ300K Digital Camera with 24X 25-600mm F2.8 LEICA DC VARIO-ELMAR Lens1', '<p><span style=\"color: rgb(113, 113, 113); font-family: DINOT, Arial, Helvetica, sans-serif;\">The Panasonic LUMIX DMC FZ300K long zoom digital camera offers 4K video features and a Leica DC lens with 24x zoom and a bright F2.8 aperture across the entire zoom range. The 4K photo function can be used in three different modes, and 4K video delivers a far more intense viewing experience that is four times larger than full HD, resulting in a much higher level of detail. Built into a splash proof/dustproof rugged camera body1.</span><br></p>', '2023-08-27 23:50:29', '2023-08-30 03:05:53'),
+(6, 'Man T-Shirt', 'man-t-shirt', 'uploards/media_64ed6d916a7c0.jpg', 2, 7, 9, 8, 5, 1, 'sssssssssssssssssssssssssssssssss', '<p>ssssssssssssssssssssssssssssssssssssssssssssssssssssss</p>', 'http://127.0.0.1:8000/admin/products/create', 'Adidas-99', 99, 9, '2023-08-30', '2023-08-31', 'new_arrival', 1, 1, 'ssssssssssssss', 'ssssssssssssssssssssssssssssssssssssss', '2023-08-28 21:01:21', '2023-08-29 22:59:24'),
+(7, 'Men Shirt-Adidas', 'men-shirt-adidas', 'uploards/media_64eedaa917999.jpg', 1, 7, 9, 8, 5, 1, 'aaaaaaaaaaaaaaaaaaaaaaaa', '<p>aaaaaaaaaaaaaaaaaaaaaaaa</p>', 'http://127.0.0.1:8000/admin/products/create', 'Shirt-Adidas', 100, 10, '2023-08-30', '2023-09-01', 'new_arrival', 1, 1, 'aaaaaaaaaaaaaaaa', 'aaaaaaaaaaaaaaaaa', '2023-08-29 22:59:05', '2023-08-29 23:42:29');
 
 -- --------------------------------------------------------
 
@@ -256,7 +306,12 @@ INSERT INTO `product_image_galleries` (`id`, `image`, `product_id`, `created_at`
 (1, 'uploards/media_64e5946d1d1f1.png', 2, '2023-08-22 22:09:01', '2023-08-22 22:09:01'),
 (2, 'uploards/media_64e59501c0ef1.png', 2, '2023-08-22 22:11:29', '2023-08-22 22:11:29'),
 (16, 'uploards/media_64e6c1756b274.png', 2, '2023-08-23 19:33:25', '2023-08-23 19:33:25'),
-(20, 'uploards/media_64ec714591ede.jpg', 5, '2023-08-28 03:04:53', '2023-08-28 03:04:53');
+(20, 'uploards/media_64ec714591ede.jpg', 5, '2023-08-28 03:04:53', '2023-08-28 03:04:53'),
+(23, 'uploards/media_64ed6db964f37.jpg', 6, '2023-08-28 21:02:01', '2023-08-28 21:02:01'),
+(24, 'uploards/media_64ed6db965ac7.png', 6, '2023-08-28 21:02:01', '2023-08-28 21:02:01'),
+(25, 'uploards/media_64ed6db9662c7.jpg', 6, '2023-08-28 21:02:01', '2023-08-28 21:02:01'),
+(26, 'uploards/media_64eee96a26c3e.png', 7, '2023-08-30 00:02:02', '2023-08-30 00:02:02'),
+(27, 'uploards/media_64eee96a27c17.png', 7, '2023-08-30 00:02:02', '2023-08-30 00:02:02');
 
 -- --------------------------------------------------------
 
@@ -279,7 +334,10 @@ CREATE TABLE `product_variants` (
 
 INSERT INTO `product_variants` (`id`, `product_id`, `name`, `status`, `created_at`, `updated_at`) VALUES
 (1, 2, 'size', 1, '2023-08-23 03:46:38', '2023-08-23 03:46:38'),
-(2, 2, 'color', 1, '2023-08-23 19:56:59', '2023-08-24 02:33:53');
+(2, 2, 'color', 1, '2023-08-23 19:56:59', '2023-08-24 02:33:53'),
+(11, 5, 'Lens', 1, '2023-08-28 19:34:46', '2023-08-30 03:33:23'),
+(13, 5, 'color', 1, '2023-08-28 20:09:45', '2023-08-28 20:09:45'),
+(14, 6, 'size', 1, '2023-08-28 21:02:30', '2023-08-28 21:02:30');
 
 -- --------------------------------------------------------
 
@@ -303,8 +361,14 @@ CREATE TABLE `product_variant_items` (
 --
 
 INSERT INTO `product_variant_items` (`id`, `product_variant_id`, `name`, `price`, `is_default`, `status`, `created_at`, `updated_at`) VALUES
-(6, 2, 'yellows', 5, 1, 0, '2023-08-24 23:03:09', '2023-08-25 00:15:32'),
-(7, 1, 'M', 1, 1, 1, '2023-08-25 00:04:23', '2023-08-25 00:04:23');
+(6, 2, 'black', 5, 0, 1, '2023-08-24 23:03:09', '2023-08-30 03:32:09'),
+(7, 1, 'M', 1, 1, 1, '2023-08-25 00:04:23', '2023-08-25 00:04:23'),
+(9, 11, 'S', 0, 0, 1, '2023-08-28 20:43:54', '2023-08-28 20:43:54'),
+(10, 11, 'L', 2, 1, 1, '2023-08-28 20:44:13', '2023-08-28 20:44:13'),
+(11, 11, 'M', 0, 1, 0, '2023-08-28 20:44:24', '2023-08-28 20:44:24'),
+(12, 13, 'black', 0, 0, 1, '2023-08-28 20:45:21', '2023-08-30 03:33:45'),
+(14, 14, 'M', 0, 1, 1, '2023-08-28 21:05:22', '2023-08-28 21:07:56'),
+(15, 13, 'silver', 10, 1, 1, '2023-08-30 03:34:02', '2023-08-30 03:34:02');
 
 -- --------------------------------------------------------
 
@@ -389,8 +453,8 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `name`, `username`, `image`, `phone`, `address_id`, `email`, `role`, `status`, `email_verified_at`, `password`, `remember_token`, `created_at`, `updated_at`) VALUES
-(1, 'Admin9999', 'Adminuser', '/uploards/1766691378-2admin_img.png', '012345678', 1, 'admin@gmail.com', 'admin', 'active', NULL, '$2y$10$Liinufadn1xvDTmNkCDsYugqu0CrezQ3YRRMgcb9XB.h49KZxopi2', 'HuSD3i0qBFlZ9on2hQ6XFipKGTMETtCZHbwAZwv6vCxUGtGwWTjSKpX0xM5Q', NULL, '2023-08-07 20:22:02'),
-(2, 'vendor99', 'vendoruser', '/uploards/139040257-vendor1.png', '012345679', 2, 'vendor@gmail.com', 'vendor', 'active', NULL, '$2y$10$CL/HBtGrr.RnE2koEehwNOEDAd7F8wADVIn/p3PPXjGiF.u/hz.r6', 'pxdz99wvj8OHwJzUapyKB1nIpYAPanAOvNA0HzN7rYVZ52JjkAlh1Y12Cy1T', NULL, '2023-08-09 01:36:22'),
+(1, 'Admin9999', 'Adminuser', '/uploards/1766691378-2admin_img.png', '012345678', 1, 'admin@gmail.com', 'admin', 'active', NULL, '$2y$10$Liinufadn1xvDTmNkCDsYugqu0CrezQ3YRRMgcb9XB.h49KZxopi2', 'KatPj9nJeeDgBKJfYY1gZzdzUHsWwVL5MfumhaJksoqQ69hgrH1aQM41x3t7', NULL, '2023-08-07 20:22:02'),
+(2, 'vendor99', 'vendoruser', '/uploards/139040257-vendor1.png', '012345679', 2, 'vendor@gmail.com', 'vendor', 'active', NULL, '$2y$10$CL/HBtGrr.RnE2koEehwNOEDAd7F8wADVIn/p3PPXjGiF.u/hz.r6', '6o2bihYd8yqeGgXIDGJhxBjaP6vs5eQR3xsYLfP7aBADQ1dtps07w45Yo5RH', NULL, '2023-08-09 01:36:22'),
 (3, 'user', 'user', 'example.txt', '012345699', 3, 'user@gmail.com', 'user', 'active', NULL, '$2y$10$/Svx2aTvnBTI8EvheJN.0.go1F6OAQCH.R7eloj9ZfXQun1REUkcu', NULL, NULL, NULL),
 (4, 'user test88', NULL, '/uploards/1221134349-admin_img.png', NULL, NULL, 'usertest88@gmail.com', 'user', 'active', NULL, '$2y$10$MjQ8HqCbaP.c4fa7P81Q0eP/pWYDKIVvz8GUdpGgvnLtu.yhx0JQ.', NULL, '2023-08-08 01:39:50', '2023-08-09 01:00:33'),
 (5, 'test user2', NULL, NULL, NULL, NULL, 'user2@gmai.com', 'user', 'active', NULL, '$2y$10$ZW6FO46/o7tv9TMVYjryBOV/6wz36cTU4OSg3ScaUvXODbnTxbDwW', NULL, '2023-08-17 20:02:23', '2023-08-17 20:02:23');
@@ -453,6 +517,18 @@ ALTER TABLE `child_categories`
 ALTER TABLE `failed_jobs`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `failed_jobs_uuid_unique` (`uuid`);
+
+--
+-- Indexes for table `flash_sales`
+--
+ALTER TABLE `flash_sales`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `flash_sale_items`
+--
+ALTER TABLE `flash_sale_items`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `migrations`
@@ -552,10 +628,22 @@ ALTER TABLE `failed_jobs`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT for table `flash_sales`
+--
+ALTER TABLE `flash_sales`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `flash_sale_items`
+--
+ALTER TABLE `flash_sale_items`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- AUTO_INCREMENT for table `personal_access_tokens`
@@ -567,25 +655,25 @@ ALTER TABLE `personal_access_tokens`
 -- AUTO_INCREMENT for table `products`
 --
 ALTER TABLE `products`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `product_image_galleries`
 --
 ALTER TABLE `product_image_galleries`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 
 --
 -- AUTO_INCREMENT for table `product_variants`
 --
 ALTER TABLE `product_variants`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `product_variant_items`
 --
 ALTER TABLE `product_variant_items`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT for table `sliders`
