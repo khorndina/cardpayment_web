@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
 use App\Models\FlashSale;
+use App\Models\FlashSaleItem;
 use App\Models\Slider;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
@@ -15,7 +16,9 @@ class HomeController extends Controller
         // dd($slider);
         $flashSale = FlashSale::first();
         // dd($flashSale);
+        $flashsaleItems = FlashSaleItem::where('show_at_home', 1)->where('status', 1)->get();
+        // dd($flashsaleItem);
 
-        return view('frontend.Home.home', compact('sliders', 'flashSale'));
+        return view('frontend.Home.home', compact('sliders', 'flashSale', 'flashsaleItems'));
     }
 }
