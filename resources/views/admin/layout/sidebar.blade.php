@@ -45,7 +45,9 @@
               <li class="{{setActive(['admin.seller-products.*'])}}"><a class="nav-link" href="{{ route('admin.seller-products.index') }}">Seller Products</a></li>
               <li class="{{setActive(['admin.seller-pending-products.*'])}}"><a class="nav-link" href="{{ route('admin.seller-pending-products.pendingProduct') }}">Seller Pending Products</a></li>
             </ul>
-          </li>
+        </li>
+
+        <li><a class="nav-link" href="{{ route('admin.general-setting.index') }}"><i class="far fa-square"></i> <span>Setting</span></a></li>
 
         {{-- <li class="dropdown">
             <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-columns"></i> <span>Layout</span></a>

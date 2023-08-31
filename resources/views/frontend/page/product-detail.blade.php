@@ -172,7 +172,7 @@
         <div class="container">
             <div class="wsus__details_bg">
                 <div class="row">
-                    <div class="col-xl-4 col-md-5 col-lg-5">
+                    <div class="col-xl-4 col-md-5 col-lg-5" style="z-index: 999 !important">
                         <div id="sticky_pro_zoom">
                             <div class="exzoom hidden" id="exzoom">
                                 <div class="exzoom_img_box">
@@ -204,9 +204,9 @@
                             <a class="title" href="javascript:;">{{$product->name}}</a>
                             <p class="wsus__stock_area"><span class="in_stock">in stock</span> (167 item)</p>
                             @if (checkDiscount($product))
-                                <h4>${{$product->offer_price}} <del>${{$product->price}}</del></h4>
+                                <h4>{{$generalSetting->currency_icon}} {{$product->offer_price}} <del>{{$generalSetting->currency_icon}} {{$product->price}}</del></h4>
                             @else
-                                <h4>${{$product->price}} </h4>
+                                <h4>{{$generalSetting->currency_icon}} {{$product->price}} </h4>
                             @endif
                             <p class="review">
                                 <i class="fas fa-star"></i>
@@ -960,7 +960,7 @@
                                 <i class="fas fa-star-half-alt"></i>
                                 <span>(133 review)</span>
                             </p>
-                            <a class="wsus__pro_name" href="#">hp 24" FHD monitore</a>
+                            <a class="wsus__pro_name" href="#">{{$product->name}}</a>
                             <p class="wsus__price">$159 <del>$200</del></p>
                             <a class="add_cart" href="#">add to cart</a>
                         </div>
