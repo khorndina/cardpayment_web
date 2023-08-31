@@ -5,6 +5,7 @@ use App\Http\Controllers\backend\AdminVendorProfileController;
 use App\Http\Controllers\backend\BrandController;
 use App\Http\Controllers\backend\CategoryController;
 use App\Http\Controllers\backend\ChildCategoryController;
+use App\Http\Controllers\backend\CouponController;
 use App\Http\Controllers\backend\FlashSaleController;
 use App\Http\Controllers\backend\ProductController;
 use App\Http\Controllers\backend\ProductImageGalleryController;
@@ -90,3 +91,7 @@ Route::delete('flash-sale-item-destroy/{flashSaleItem}', [FlashSaleController::c
 // General setting route
 Route::get('general-setting', [SettingController::class, 'index'])->name('general-setting.index');
 Route::put('general-setting-update', [SettingController::class, 'updateGeneralSetting'])->name('general-setting-update.updateGeneralSetting');
+
+
+// Coupon route
+Route::resource('coupons', CouponController::class);
