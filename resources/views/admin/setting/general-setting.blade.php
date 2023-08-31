@@ -23,7 +23,11 @@
                 <label for="currency_name">Default Currency Name</label>
                 <select id="currency_name" name="currency_name" class="form-control select2">
                 <option value="">select</option>
-                {{-- @foreach(config('setting.currency_list') as $key => $currency)
+                @foreach(config('settings.currency') as $key => $value)
+                    <option {{@$generalSetting->currency_name == $key ? 'selected': ''}} value="{{ $key }}">{{ $key }}</option>
+                @endforeach
+                {{-- @foreach(config('setting.currency') as $currency)
+                    <option value="">select</option>
                     <option {{@$generalSetting->currency_name == $key ? 'selected': ''}} value="{{$key}}">{{$key}}</option>
                 @endforeach --}}
                 </select>
@@ -36,9 +40,9 @@
                   <label for="timezone">Timezone</label>
                   <select id="timezone" name="timezone" class="form-control select2">
                   <option value="">select</option>
-                  {{-- @foreach(config('setting.timezone') as $key => $timezone)
-                    <option {{@$generalSetting->timezone == $key ? 'selected': ''}} value="{{$key}}">{{$key}}</option>
-                  @endforeach --}}
+                  @foreach(config('settings.timezone') as $key => $value)
+                    <option {{@$generalSetting->timezone == $key ? 'selected': ''}} value="{{ $key }}">{{ $key }}</option>
+                  @endforeach
                   </select>
               </div>
               <div class="card-footer">

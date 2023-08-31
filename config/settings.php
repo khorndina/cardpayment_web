@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'currency_list' => [
+    'currency' => [
         'ALL' => 'Albania Lek',
         'AFN' => 'Afghanistan Afghani',
         'ARS' => 'Argentina Peso',
@@ -518,5 +518,5 @@ return [
         'Antarctica/South_Pole' => '(GMT+12:00) Antarctica/South_Pole (New Zealand Standard Time)',
         'Asia/Anadyr' => '(GMT+12:00) Asia/Anadyr (Anadyr Time)',
         'Asia/Kamchatka' => '(GMT+12:00) Asia/Kamchatka (Petropavlovsk-Kamchatski Time)'
-    ]
+    ],
 ];
