@@ -4,6 +4,7 @@ namespace App\Http\Controllers\backend;
 
 use App\DataTables\CouponDataTable;
 use App\Http\Controllers\Controller;
+use App\Models\Coupon;
 use Illuminate\Http\Request;
 
 class CouponController extends Controller
@@ -21,7 +22,7 @@ class CouponController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.coupon.create');
     }
 
     /**
@@ -29,7 +30,36 @@ class CouponController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // dd(($request->all()));
+        $request->validate([
+            'name' => 'required|max:200',
+            'code' => 'required',
+            'quantity' => 'required',
+            'max_use' => 'required',
+            'start_date' => 'required|date',
+            'end_date' => 'required|date',
+            'discount_type' => 'required',
+            'discount' => 'required',
+            'status' => 'required',
+        ]);
+
+        $coupon = new Coupon();
+
+        $coupon->name = $request->name;
+        $coupon->quantity = $request->quantity;
+        $coupon->code = $request->code;
+        $coupon->max_use = $request->max_use;
+        $coupon->start_date = $request->start_date;
+        $coupon->end_date = $request->end_date;
+        $coupon->discount_type = $request->discount_type;
+        $coupon->discount_value = $request->discount;
+        $coupon->total_use = 0;
+        $coupon->status = $request->status;
+
+        $coupon->save();
+
+        toastr('Creates Successfully!','success');
+        return redirect()->route('admin.coupons.index');
     }
 
     /**
