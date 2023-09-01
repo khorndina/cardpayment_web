@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 30, 2023 at 01:03 PM
+-- Generation Time: Sep 01, 2023 at 12:52 PM
 -- Server version: 10.4.22-MariaDB
 -- PHP Version: 8.2.7
 
@@ -106,6 +106,35 @@ INSERT INTO `child_categories` (`id`, `category_id`, `sub_category_id`, `name`, 
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `coupons`
+--
+
+CREATE TABLE `coupons` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `code` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `quantity` int(11) NOT NULL,
+  `max_use` int(11) NOT NULL,
+  `start_date` date NOT NULL,
+  `end_date` date NOT NULL,
+  `discount_type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `discount_value` double NOT NULL,
+  `status` tinyint(1) NOT NULL,
+  `total_use` int(11) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `coupons`
+--
+
+INSERT INTO `coupons` (`id`, `name`, `code`, `quantity`, `max_use`, `start_date`, `end_date`, `discount_type`, `discount_value`, `status`, `total_use`, `created_at`, `updated_at`) VALUES
+(2, '$9 Off', 'tinh-9', 10009, 59, '2023-09-01', '2023-09-03', 'amount', 9, 1, 0, '2023-08-31 19:49:30', '2023-08-31 19:56:01');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `failed_jobs`
 --
 
@@ -168,6 +197,31 @@ INSERT INTO `flash_sale_items` (`id`, `product_id`, `flash_sale_id`, `show_at_ho
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `general_settings`
+--
+
+CREATE TABLE `general_settings` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `site_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `layout` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `contact_email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `currency_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `currency_icon` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `timezone` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `general_settings`
+--
+
+INSERT INTO `general_settings` (`id`, `site_name`, `layout`, `contact_email`, `currency_name`, `currency_icon`, `timezone`, `created_at`, `updated_at`) VALUES
+(1, 'uatsite', 'LTR', 'khorn.dina@gmail.com', 'USD', '$', 'Asia/Ho_Chi_Minh', '2023-08-31 00:34:09', '2023-08-31 02:35:11');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `migrations`
 --
 
@@ -198,7 +252,11 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (16, '2023_08_24_093524_create_product_variant_items_table', 11),
 (17, '2023_08_25_091257_add_shop_name_to_vendors_table', 12),
 (18, '2023_08_29_101639_create_flash_sales_table', 13),
-(19, '2023_08_29_101650_create_flash_sale_items_table', 13);
+(19, '2023_08_29_101650_create_flash_sale_items_table', 13),
+(20, '2023_08_31_061424_create_general_settings_table', 14),
+(21, '2023_08_31_083319_create_coupons_table', 15),
+(22, '2023_09_01_031111_create_shipping_rules_table', 16),
+(23, '2023_09_01_072742_create_user_addresses_table', 17);
 
 -- --------------------------------------------------------
 
@@ -373,6 +431,31 @@ INSERT INTO `product_variant_items` (`id`, `product_variant_id`, `name`, `price`
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `shipping_rules`
+--
+
+CREATE TABLE `shipping_rules` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `min_cost` double DEFAULT NULL,
+  `cost` double NOT NULL,
+  `status` tinyint(1) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `shipping_rules`
+--
+
+INSERT INTO `shipping_rules` (`id`, `name`, `type`, `min_cost`, `cost`, `status`, `created_at`, `updated_at`) VALUES
+(1, 'Default delivery', 'min_cost', 5, 0, 0, '2023-08-31 21:07:04', '2023-08-31 23:25:31'),
+(2, 'Express Delivery', 'flat_cost', NULL, 9, 1, '2023-08-31 21:07:28', '2023-08-31 23:09:18');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `sliders`
 --
 
@@ -453,11 +536,40 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `name`, `username`, `image`, `phone`, `address_id`, `email`, `role`, `status`, `email_verified_at`, `password`, `remember_token`, `created_at`, `updated_at`) VALUES
-(1, 'Admin9999', 'Adminuser', '/uploards/1766691378-2admin_img.png', '012345678', 1, 'admin@gmail.com', 'admin', 'active', NULL, '$2y$10$Liinufadn1xvDTmNkCDsYugqu0CrezQ3YRRMgcb9XB.h49KZxopi2', 'KatPj9nJeeDgBKJfYY1gZzdzUHsWwVL5MfumhaJksoqQ69hgrH1aQM41x3t7', NULL, '2023-08-07 20:22:02'),
-(2, 'vendor99', 'vendoruser', '/uploards/139040257-vendor1.png', '012345679', 2, 'vendor@gmail.com', 'vendor', 'active', NULL, '$2y$10$CL/HBtGrr.RnE2koEehwNOEDAd7F8wADVIn/p3PPXjGiF.u/hz.r6', '6o2bihYd8yqeGgXIDGJhxBjaP6vs5eQR3xsYLfP7aBADQ1dtps07w45Yo5RH', NULL, '2023-08-09 01:36:22'),
+(1, 'Admin9999', 'Adminuser', '/uploards/1766691378-2admin_img.png', '012345678', 1, 'admin@gmail.com', 'admin', 'active', NULL, '$2y$10$Liinufadn1xvDTmNkCDsYugqu0CrezQ3YRRMgcb9XB.h49KZxopi2', 'WV9aYVP0JEhf9gywohi2soMmRC1WvawB9etuY9iNex68KJMVUkeYt2MWqMTu', NULL, '2023-08-07 20:22:02'),
+(2, 'vendor99', 'vendoruser', '/uploards/139040257-vendor1.png', '012345679', 2, 'vendor@gmail.com', 'vendor', 'active', NULL, '$2y$10$CL/HBtGrr.RnE2koEehwNOEDAd7F8wADVIn/p3PPXjGiF.u/hz.r6', 'omvNzY8zKNXsQPt2vOFsU2wyjxdc3xSXrInrmFRg2Dr5euTS5N8QkACYCgBL', NULL, '2023-08-09 01:36:22'),
 (3, 'user', 'user', 'example.txt', '012345699', 3, 'user@gmail.com', 'user', 'active', NULL, '$2y$10$/Svx2aTvnBTI8EvheJN.0.go1F6OAQCH.R7eloj9ZfXQun1REUkcu', NULL, NULL, NULL),
 (4, 'user test88', NULL, '/uploards/1221134349-admin_img.png', NULL, NULL, 'usertest88@gmail.com', 'user', 'active', NULL, '$2y$10$MjQ8HqCbaP.c4fa7P81Q0eP/pWYDKIVvz8GUdpGgvnLtu.yhx0JQ.', NULL, '2023-08-08 01:39:50', '2023-08-09 01:00:33'),
 (5, 'test user2', NULL, NULL, NULL, NULL, 'user2@gmai.com', 'user', 'active', NULL, '$2y$10$ZW6FO46/o7tv9TMVYjryBOV/6wz36cTU4OSg3ScaUvXODbnTxbDwW', NULL, '2023-08-17 20:02:23', '2023-08-17 20:02:23');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `user_addresses`
+--
+
+CREATE TABLE `user_addresses` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `phone` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `country` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `state` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `city` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `zip` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `address` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `user_addresses`
+--
+
+INSERT INTO `user_addresses` (`id`, `user_id`, `name`, `email`, `phone`, `country`, `state`, `city`, `zip`, `address`, `created_at`, `updated_at`) VALUES
+(2, 5, 'dina home', 'myhome@gmail.com', '0123456987', 'Cambodia', 'Takeo', 'Takeo', '0123', 'bati, takeo', '2023-09-01 00:51:43', '2023-09-01 00:51:43'),
+(3, 5, 'Mrr.Dina', 'dina@gmail.com', '0123456789', 'American Samoa', 'Phnom Penh', 'Phnom Penh', '555', 'Cambodia', '2023-09-01 01:05:44', '2023-09-01 01:05:44');
 
 -- --------------------------------------------------------
 
@@ -512,6 +624,12 @@ ALTER TABLE `child_categories`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `coupons`
+--
+ALTER TABLE `coupons`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `failed_jobs`
 --
 ALTER TABLE `failed_jobs`
@@ -528,6 +646,12 @@ ALTER TABLE `flash_sales`
 -- Indexes for table `flash_sale_items`
 --
 ALTER TABLE `flash_sale_items`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `general_settings`
+--
+ALTER TABLE `general_settings`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -575,6 +699,12 @@ ALTER TABLE `product_variant_items`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `shipping_rules`
+--
+ALTER TABLE `shipping_rules`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `sliders`
 --
 ALTER TABLE `sliders`
@@ -592,6 +722,12 @@ ALTER TABLE `sub_categories`
 ALTER TABLE `users`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `users_email_unique` (`email`);
+
+--
+-- Indexes for table `user_addresses`
+--
+ALTER TABLE `user_addresses`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `vendors`
@@ -622,6 +758,12 @@ ALTER TABLE `child_categories`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
+-- AUTO_INCREMENT for table `coupons`
+--
+ALTER TABLE `coupons`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
 -- AUTO_INCREMENT for table `failed_jobs`
 --
 ALTER TABLE `failed_jobs`
@@ -640,10 +782,16 @@ ALTER TABLE `flash_sale_items`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
+-- AUTO_INCREMENT for table `general_settings`
+--
+ALTER TABLE `general_settings`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT for table `personal_access_tokens`
@@ -676,6 +824,12 @@ ALTER TABLE `product_variant_items`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
+-- AUTO_INCREMENT for table `shipping_rules`
+--
+ALTER TABLE `shipping_rules`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
 -- AUTO_INCREMENT for table `sliders`
 --
 ALTER TABLE `sliders`
@@ -692,6 +846,12 @@ ALTER TABLE `sub_categories`
 --
 ALTER TABLE `users`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+--
+-- AUTO_INCREMENT for table `user_addresses`
+--
+ALTER TABLE `user_addresses`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `vendors`
