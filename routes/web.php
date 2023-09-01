@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\backend\AdminController;
 use App\Http\Controllers\backend\VendorController;
+use App\Http\Controllers\frontend\CartController;
 use App\Http\Controllers\frontend\FlashSaleController;
 use App\Http\Controllers\frontend\FrontendProductController;
 use App\Http\Controllers\Frontend\HomeController;
@@ -68,6 +69,9 @@ Route::get('flash-sale',[FlashSaleController::class, 'index'])->name('flash-sale
 
 /**show Product detail route */
 Route::get('product-detail/{slug}',[FrontendProductController::class, 'showProduct'])->name('product-detail.showProduct');
+
+/**Add to cart route */
+Route::post('add-to-cart', [CartController::class, 'addToCart'])->name('add-to-cart');
 
 /**user profile route */
 Route::group(['middleware' => ['auth', 'verified'], 'prefix' => 'user', 'as' => 'user.'], function(){

@@ -1,3 +1,7 @@
+@section('title')
+{{$generalSetting->site_name}} || aba bank
+@endsection
+
 @extends('frontend.layouts.master')
 
 @section('Content')
