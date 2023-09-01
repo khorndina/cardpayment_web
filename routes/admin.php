@@ -14,6 +14,7 @@ use App\Http\Controllers\backend\ProductVariantontroller;
 use App\Http\Controllers\backend\ProfileController;
 use App\Http\Controllers\backend\SellerProductController;
 use App\Http\Controllers\backend\SettingController;
+use App\Http\Controllers\backend\ShippingRuleController;
 use App\Http\Controllers\backend\SliderController;
 use App\Http\Controllers\backend\SubCategoryController;
 use Illuminate\Support\Facades\Route;
@@ -94,4 +95,9 @@ Route::put('general-setting-update', [SettingController::class, 'updateGeneralSe
 
 
 // Coupon route
+Route::put('coupons/change-status', [CouponController::class, 'changestatus'])->name('coupons.changestatus');
 Route::resource('coupons', CouponController::class);
+
+// Shipping Rule route
+Route::put('shipping-rule/change-status', [ShippingRuleController::class, 'changestatus'])->name('shipping-rule.changestatus');
+Route::resource('shipping-rule', ShippingRuleController::class);

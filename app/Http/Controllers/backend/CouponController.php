@@ -75,7 +75,8 @@ class CouponController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $coupon = Coupon::findOrFail($id);
+        return view('admin.coupon.edit', compact('coupon'));
     }
 
     /**
@@ -83,7 +84,35 @@ class CouponController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        // dd($request->all());
+         $request->validate([
+            'name' => 'required|max:200',
+            'code' => 'required',
+            'quantity' => 'required',
+            'max_use' => 'required',
+            'start_date' => 'required|date',
+            'end_date' => 'required|date',
+            'discount_type' => 'required',
+            'discount' => 'required',
+            'status' => 'required',
+        ]);
+
+        $coupon = Coupon::findOrFail($id);
+
+        $coupon->name = $request->name;
+        $coupon->quantity = $request->quantity;
+        $coupon->code = $request->code;
+        $coupon->max_use = $request->max_use;
+        $coupon->start_date = $request->start_date;
+        $coupon->end_date = $request->end_date;
+        $coupon->discount_type = $request->discount_type;
+        $coupon->discount_value = $request->discount;
+        $coupon->status = $request->status;
+
+        $coupon->save();
+
+        toastr('Updated Successfully!','success');
+        return redirect()->route('admin.coupons.index');
     }
 
     /**
@@ -91,6 +120,16 @@ class CouponController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $coupon = Coupon::findOrFail($id);
+        $coupon->delete();
+        return response(['status'=>'success', 'message'=>'Deleted Successfully!']);
+    }
+
+    public function changestatus(Request $request){
+        $coupon = Coupon::findOrFail($request->id);
+        $coupon->status = $request->ischecked == "true" ? 1 : 0;
+        $coupon->save();
+
+        return response(['message'=>'status has been updated!']);
     }
 }

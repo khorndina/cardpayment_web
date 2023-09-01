@@ -5,10 +5,11 @@
     <div class="main-content">
         <section class="section">
           <div class="section-header">
-            <h1>Coupon</h1>
+            <h1>Shipping Rule</h1>
             <div class="section-header-breadcrumb">
-              <div class="breadcrumb-item active"><a href="ro">Dashboard</a></div>
-              <div class="breadcrumb-item">Coupon</div>
+              <div class="breadcrumb-item active"><a href="#">Dashboard</a></div>
+              <div class="breadcrumb-item"><a href="#">Components</a></div>
+              <div class="breadcrumb-item">Shipping Rule</div>
             </div>
           </div>
 
@@ -17,8 +18,8 @@
               <div class="col-12">
                 <div class="card">
                   <div class="card-header">
-                    <h4>All Coupon</h4>
-                    <div class="card-header-action"><a href="{{ route('admin.coupons.create') }}" class="btn btn-primary">+ Create New</a></div>
+                    <h4>All Shipping Rule</h4>
+                    <div class="card-header-action"><a href="{{ route('admin.shipping-rule.create') }}" class="btn btn-primary">+ Create New</a></div>
                   </div>
                   <div class="card-body">
                     {{$dataTable->table()}}
@@ -42,7 +43,7 @@
 		let id = $(this).data('id');
         // console.log(id); /**show on console when inspec*/
         $.ajax({
-                url: "{{route('admin.coupons.changestatus')}}",
+                url: "{{route('admin.shipping-rule.changestatus')}}",
                 method: 'PUT',
                 data:{
                     ischecked:ischecked,
