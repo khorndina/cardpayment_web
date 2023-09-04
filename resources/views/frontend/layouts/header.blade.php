@@ -33,10 +33,10 @@
                         </div>
                     </div>
                     <ul class="wsus__icon_area">
-                        <li><a href="wishlist.html"><i class="fal fa-heart"></i><span>05</span></a></li>
-                        <li><a href="compare.html"><i class="fal fa-random"></i><span>03</span></a></li>
+                        <li><a href="wishlist.html"><i class="fal fa-heart"></i><span>99</span></a></li>
+                        <li><a href="compare.html"><i class="fal fa-random"></i><span>99</span></a></li>
                         <li><a class="wsus__cart_icon" href="#"><i
-                                    class="fal fa-shopping-bag"></i><span>04</span></a></li>
+                                    class="fal fa-shopping-bag"></i><span id="cart_count">{{Cart::content()->count()}}</span></a></li>
                     </ul>
                 </div>
             </div>
@@ -98,7 +98,7 @@
         </ul>
         <h5>sub total <span>$3540</span></h5>
         <div class="wsus__minicart_btn_area">
-            <a class="common_btn" href="cart_view.html">view cart</a>
+            <a class="common_btn" href="{{ route('cart-details') }}">view cart</a>
             <a class="common_btn" href="check_out.html">checkout</a>
         </div>
     </div>

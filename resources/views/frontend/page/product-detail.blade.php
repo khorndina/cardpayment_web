@@ -4,7 +4,7 @@
         <!--==========================
       PRODUCT MODAL VIEW START
     ===========================-->
-    <section class="product_popup_modal">
+    {{-- <section class="product_popup_modal">
         <div class="modal fade" id="exampleModal2" tabindex="-1" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -135,7 +135,7 @@
                 </div>
             </div>
         </div>
-    </section>
+    </section> --}}
     <!--==========================
       PRODUCT MODAL VIEW END
     ===========================-->
@@ -1104,6 +1104,7 @@
                 }
             });
 
+            // add product to cart
             $('.shopping-cart-form').on('submit', function(e){
                 e.preventDefault();
 
@@ -1118,14 +1119,30 @@
                     data: formData,
                     url: "{{route('add-to-cart')}}",
                     success: function(data){
-
+                        getCartCount()
+                        toastr.success(data.message)
                     },
                     error: function(data){
-
+                        console.log(error);
                     }
 
                 })
             })
+
+            function getCartCount(){
+                $.ajax({
+                    method: 'GET',
+                    url: "{{route('cart.count')}}",
+                    success: function(data){
+                        // console.log(data);
+                        $('#cart_count').text(data);
+                    },
+                    error: function(data){
+                        console.log(error);
+                    }
+
+                })
+            }
         })
     </script>
 @endpush

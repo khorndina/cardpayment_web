@@ -17,6 +17,7 @@ class CartController extends Controller
         // dd($request->variants);
 
         $product = Product::findOrFail($request->product_id);
+        // dd($product);
 
         /** check product quantity */
         if($product->qyt === 0){
@@ -62,7 +63,7 @@ class CartController extends Controller
         $cartData['weight'] = 10;
         $cartData['options']['variants'] = $variants;
         $cartData['options']['variants_total'] = $variantTotalAmount;
-        $cartData['options']['image'] = $product->thumb_image;
+        $cartData['options']['image'] = $product->thum_image;
         $cartData['options']['slug'] = $product->slug;
 
         // dd($cartData);
@@ -70,5 +71,68 @@ class CartController extends Controller
         Cart::add($cartData);
 
         return response(['status' => 'success', 'message' => 'Added to cart successfully!']);
+    }
+
+    public function cartDetail(){
+
+        $cartItems = Cart::content();
+        // dd($cartItems);
+
+        // if(count($cartItems) === 0){
+        //     Session::forget('coupon');
+        //     toastr('Please add some products in your cart for view the cart page', 'warning', 'Cart is empty!');
+        //     return redirect()->route('home');
+        // }
+
+        // $cartpage_banner_section = Adverisement::where('key', 'cartpage_banner_section')->first();
+        // $cartpage_banner_section = json_decode($cartpage_banner_section?->value);
+        return view('frontend.page.cart-detail', compact('cartItems'));
+    }
+
+    /** Update product quantity */
+    public function updateProductQty(Request $request)
+    {
+        // dd($request->all());
+        // dd($request->rowId, $request->quantity);
+
+        Cart::update($request->rowId, $request->quantity);
+
+        // Store the updated quantity in the session
+        session()->put('cart.quantity', $request->quantity);
+        // dd(session('cart.quantity'));
+
+        $productTotal = $this->getProductTotal($request->rowId);
+
+        return response(['status' => 'success', 'message' => 'Product Quantity Updated!', 'product_total' => $productTotal]);
+    }
+
+    /** get product total */
+    public function getProductTotal($rowId)
+    {
+       $product = Cart::get($rowId);
+       $total = ($product->price + $product->options->variants_total) * $product->qty;
+       return $total;
+    }
+
+    /** clear all cart products */
+    public function clearCart()
+    {
+        Cart::destroy();
+
+        return response(['status' => 'success', 'message' => 'Cart cleared successfully']);
+    }
+
+    /** Remove product form cart */
+    public function removeProduct($rowId)
+    {
+        Cart::remove($rowId);
+        toastr('Product removed succesfully!', 'success', 'Success');
+        return redirect()->back();
+    }
+
+    /** Get cart count */
+    public function getCartCount()
+    {
+        return Cart::content()->count();
     }
 }
