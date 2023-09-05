@@ -135,4 +135,10 @@ class CartController extends Controller
     {
         return Cart::content()->count();
     }
+
+    /** Get all cart products */
+    public function getCartProducts()
+    {
+        return Cart::content();
+    }
 }

@@ -449,7 +449,7 @@
                                                 <div class="col-xl-8 col-lg-7">
                                                     <div class="wsus__comment_area">
                                                         <h4>Reviews <span>02</span></h4>
-                                                        <div class="wsus__main_comment">
+                                                        {{-- <div class="wsus__main_comment">
                                                             <div class="wsus__comment_img">
                                                                 <img src="images/client_img_3.jpg" alt="user"
                                                                     class="img-fluid w-100">
@@ -495,8 +495,8 @@
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                        </div>
-                                                        <div class="wsus__main_comment">
+                                                        </div> --}}
+                                                        {{-- <div class="wsus__main_comment">
                                                             <div class="wsus__comment_img">
                                                                 <img src="images/client_img_1.jpg" alt="user"
                                                                     class="img-fluid w-100">
@@ -535,8 +535,8 @@
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                        </div>
-                                                        <div id="pagination">
+                                                        </div> --}}
+                                                        {{-- <div id="pagination">
                                                             <nav aria-label="Page navigation example">
                                                                 <ul class="pagination">
                                                                     <li class="page-item">
@@ -561,7 +561,7 @@
                                                                     </li>
                                                                 </ul>
                                                             </nav>
-                                                        </div>
+                                                        </div> --}}
                                                     </div>
                                                 </div>
                                                 <div class="col-xl-4 col-lg-5 mt-4 mt-lg-0">
@@ -1120,6 +1120,7 @@
                     url: "{{route('add-to-cart')}}",
                     success: function(data){
                         getCartCount()
+                        fetchSidebarCartProduct()
                         toastr.success(data.message)
                     },
                     error: function(data){
@@ -1136,6 +1137,38 @@
                     success: function(data){
                         // console.log(data);
                         $('#cart_count').text(data);
+                    },
+                    error: function(data){
+                        console.log(error);
+                    }
+
+                })
+            }
+
+            function fetchSidebarCartProduct(){
+                $.ajax({
+                    method: 'GET',
+                    url: "{{route('get-cart-product')}}",
+                    success: function(data){
+                        // console.log(data);
+                        $('.mini_cart_wrapper').html("");
+                        var html = '';
+                        for(let item in data){
+                            let product = data[item];
+                            html += `<li>
+                                        <div class="wsus__cart_img">
+                                            <a href="{{url('product-detail')}}/${product.options.slug}"><img src="{{asset('/')}}${product.options.image}" alt="product" class="img-fluid w-100"></a>
+                                            <a class="wsis__del_icon" href="#"><i class="fas fa-minus-circle"></i></a>
+                                        </div>
+                                        <div class="wsus__cart_text">
+                                            <a class="wsus__cart_title" href="{{url('product-detail')}}/${product.options.slug}">${product.name}</a>
+                                            <p>{{$generalSetting->currency_icon}} ${product.price}</p>
+                                        </div>
+                                    </li>`
+                        }
+
+                        $('.mini_cart_wrapper').html(html);
+
                     },
                     error: function(data){
                         console.log(error);
