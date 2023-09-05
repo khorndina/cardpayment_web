@@ -7,10 +7,28 @@ use App\Models\Product;
 use App\Models\ProductVariantItem;
 use Illuminate\Http\Request;
 use Cart;
+use Illuminate\Support\Facades\Session;
 
 class CartController extends Controller
 {
-        /** Add item to cart */
+    public function cartDetail(){
+
+        $cartItems = Cart::content();
+        // dd($cartItems);
+
+        if(count($cartItems) === 0){
+            Session::forget('coupon');
+            toastr('Please add some products in your cart for view the cart page', 'warning', 'Cart is empty!');
+            return redirect()->route('home');
+        }
+
+        // $cartpage_banner_section = Adverisement::where('key', 'cartpage_banner_section')->first();
+        // $cartpage_banner_section = json_decode($cartpage_banner_section?->value);
+
+        return view('frontend.page.cart-detail', compact('cartItems'));
+    }
+
+    /** Add item to cart */
     public function addToCart(Request $request)
     {
         // dd($request->all());
@@ -73,21 +91,6 @@ class CartController extends Controller
         return response(['status' => 'success', 'message' => 'Added to cart successfully!']);
     }
 
-    public function cartDetail(){
-
-        $cartItems = Cart::content();
-        // dd($cartItems);
-
-        // if(count($cartItems) === 0){
-        //     Session::forget('coupon');
-        //     toastr('Please add some products in your cart for view the cart page', 'warning', 'Cart is empty!');
-        //     return redirect()->route('home');
-        // }
-
-        // $cartpage_banner_section = Adverisement::where('key', 'cartpage_banner_section')->first();
-        // $cartpage_banner_section = json_decode($cartpage_banner_section?->value);
-        return view('frontend.page.cart-detail', compact('cartItems'));
-    }
 
     /** Update product quantity */
     public function updateProductQty(Request $request)
@@ -130,7 +133,6 @@ class CartController extends Controller
     public function clearCart()
     {
         Cart::destroy();
-
         return response(['status' => 'success', 'message' => 'Cart cleared successfully']);
     }
 

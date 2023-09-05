@@ -121,7 +121,7 @@
                 <div class="col-xl-3">
                     <div class="wsus__cart_list_footer_button" id="sticky_sidebar">
                         <h6>total cart</h6>
-                        <p>subtotal: <span>$124.00</span></p>
+                        <p>subtotal: <span id="sub_total">{{$generalSetting->currency_icon}}{{getCartTotal()}}</span></p>
                         <p>delivery: <span>$00.00</span></p>
                         <p>discount: <span>$10.00</span></p>
                         <p class="total"><span>total:</span> <span>$134.00</span></p>
@@ -186,9 +186,7 @@
 
             // Increment product quantity
             $('.product-increment').on('click', function(){
-
                 // event.preventDefault(); // Prevents the default behavior of the button
-
                 // alert('hi');
                 let input = $(this).siblings('.product-qty');
                 let quantity = parseInt(input.val()) + 1;
@@ -213,6 +211,8 @@
                         }else {
                             toastr.error(data.message)
                         }
+
+                        getCartSubTotal()
                     },
                     error: function(data){
 
@@ -250,6 +250,8 @@
                         }else if(data.status === 'error'){
                             toastr.error(data.message)
                         }
+
+                        getCartSubTotal()
                     },
                     error: function(data){
 
@@ -272,7 +274,6 @@
                         $.ajax({
                             type: 'get',
                             url: "{{route('cart.clear')}}",
-
                             success: function(data){
                                 // console.log(data);
                                 if(data.status == 'success'){
@@ -280,7 +281,6 @@
                                 window.location.reload();
                                 }
                             },
-
                             error:function(xhr, status, error){
                                 console.log(error);
                             }
@@ -288,6 +288,20 @@
                     }
                 })
             })
+
+            function getCartSubTotal(){
+                $.ajax({
+                    method: 'GET',
+                    url: "{{route('cart.sidebar-product-total')}}",
+                    success: function(data){
+                        // console.log(data);
+                        $('#sub_total').text("{{$generalSetting->currency_icon}}"+data)
+                    },
+                    error:function(data){
+                        console.log(error);
+                    }
+                })
+            }
         })
     </script>
 @endpush
