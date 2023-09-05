@@ -43,8 +43,8 @@
                     </ul>
 
                     <ul class="wsus__menu_item">
-                        <li><a class="active" href="index.html">home</a></li>
-                        <li><a href="product_grid_view.html">shop <i class="fas fa-caret-down"></i></a>
+                        <li><a class="active" href="{{ route('home') }}">home</a></li>
+                        {{-- <li><a href="product_grid_view.html">shop <i class="fas fa-caret-down"></i></a>
                             <div class="wsus__mega_menu">
                                 <div class="row">
                                     <div class="col-xl-3 col-lg-3">
@@ -129,13 +129,13 @@
                                 <li><a href="product_category.html">product category</a></li>
                                 <li><a href="brands.html">brands</a></li>
                             </ul>
-                        </li>
+                        </li> --}}
                         <li><a href="track_order.html">track order</a></li>
                         <li><a href="daily_deals.html">daily deals</a></li>
                     </ul>
                     <ul class="wsus__menu_item wsus__menu_item_right">
-                        <li><a href="contact.html">contact</a></li>
-                        <li><a href="dsahboard.html">my account</a></li>
+                        {{-- <li><a href="contact.html">contact</a></li>
+                        <li><a href="dsahboard.html">my account</a></li> --}}
                         <li><a href="{{ route('login') }}">login</a></li>
                     </ul>
                 </div>

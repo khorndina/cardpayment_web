@@ -78,6 +78,8 @@ Route::get('clear-cart', [CartController::class, 'clearCart'])->name('cart.clear
 Route::get('cart-remove/{rowId}', [CartController::class, 'removeProduct'])->name('cart.remove');
 Route::get('cart-count', [CartController::class, 'getCartCount'])->name('cart.count');
 Route::get('get-cart-product', [CartController::class, 'getCartProducts'])->name('get-cart-product');
+Route::post('cart-remove-product-sidebar', [CartController::class, 'removeSidebarProduct'])->name('cart.remove-product-sidebar');
+Route::get('cart/sidebar-product-total', [CartController::class, 'cartTotal'])->name('cart.sidebar-product-total');
 
 /**user profile route */
 Route::group(['middleware' => ['auth', 'verified'], 'prefix' => 'user', 'as' => 'user.'], function(){

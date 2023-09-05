@@ -22,7 +22,7 @@ class CartController extends Controller
         /** check product quantity */
         if($product->qyt === 0){
             return response(['status' => 'error', 'message' => 'Product stock out']);
-        }elseif($product->qyt < $request->qty){
+        }elseif($product->qyt < $request->quantity){
             return response(['status' => 'error', 'message' => 'Quantity not available in our stock']);
         }
 
@@ -95,6 +95,18 @@ class CartController extends Controller
         // dd($request->all());
         // dd($request->rowId, $request->quantity);
 
+        $productId = Cart::get($request->rowId)->id;
+        // dd($productId);
+        $product = Product::findOrFail($productId);
+        // dd($product);
+
+        /** check product quantity */
+        if($product->qyt === 0){
+            return response(['status' => 'error', 'message' => 'Product stock out']);
+        }elseif($product->qyt < $request->quantity){
+            return response(['status' => 'error', 'message' => 'Quantity not available in our stock']);
+        }
+
         Cart::update($request->rowId, $request->quantity);
 
         // Store the updated quantity in the session
@@ -141,4 +153,24 @@ class CartController extends Controller
     {
         return Cart::content();
     }
+
+    /** Romve product form sidebar cart */
+    public function removeSidebarProduct(Request $request)
+    {
+        Cart::remove($request->rowId);
+
+        return response(['status' => 'success', 'message' => 'Product removed successfully!']);
+    }
+
+    /** get cart total amount */
+    public function cartTotal()
+    {
+        $total = 0;
+        foreach(Cart::content() as $product){
+            $total += $this->getProductTotal($product->rowId);
+        }
+
+        return $total;
+    }
+
 }

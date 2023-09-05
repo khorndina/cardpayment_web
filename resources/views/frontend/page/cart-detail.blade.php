@@ -206,9 +206,12 @@
                     success: function(data){
                         if(data.status === 'success'){
                             let productId = '#'+rowId;
+                            let totalAmount = "{{$generalSetting->currency_icon}}"+data.product_total
                             $(productId).text(data.product_total)
                             // console.log(data.product_total);
                             toastr.success(data.message)
+                        }else {
+                            toastr.error(data.message)
                         }
                     },
                     error: function(data){
@@ -244,6 +247,8 @@
                             $(productId).text(data.product_total)
                             // console.log(data.product_total);
                             toastr.success(data.message)
+                        }else if(data.status === 'error'){
+                            toastr.error(data.message)
                         }
                     },
                     error: function(data){

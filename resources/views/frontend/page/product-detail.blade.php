@@ -202,7 +202,12 @@
                     <div class="col-xl-5 col-md-7 col-lg-7">
                         <div class="wsus__pro_details_text">
                             <a class="title" href="javascript:;">{{$product->name}}</a>
-                            <p class="wsus__stock_area"><span class="in_stock">in stock</span> (167 item)</p>
+                            @if ($product->qyt > 0)
+                                <p class="wsus__stock_area"><span class="in_stock">in stock</span> ({{$product->qyt}} item)</p>
+                            @else
+                                <p class="wsus__stock_area"><span class="in_stock">Out of Stock</span> ({{$product->qyt}} item)</p>
+                            @endif
+
                             @if (checkDiscount($product))
                                 <h4>{{$generalSetting->currency_icon}} {{$product->offer_price}} <del>{{$generalSetting->currency_icon}} {{$product->price}}</del></h4>
                             @else
@@ -227,14 +232,18 @@
                                     <div class="row">
                                         <input type="hidden" name="product_id" value="{{$product->id}}">
                                         @foreach ($product->variants as $variant)
-                                        <div class="col-xl-6 col-sm-6">
-                                            <h5 class="mb-2">{{$variant->name}}:</h5>
-                                            <select class="select_2" name="variants[]">
-                                                @foreach ($variant->productVariantItems as $productVariantItem)
-                                                    <option {{$productVariantItem->is_default == 1 ? 'selected' : ''}} value="{{$productVariantItem->id}}">{{$productVariantItem->name}} (${{$productVariantItem->price}})</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
+                                            @if($variant->status)
+                                                <div class="col-xl-6 col-sm-6">
+                                                    <h5 class="mb-2">{{$variant->name}}:</h5>
+                                                    <select class="select_2" name="variants[]">
+                                                        @foreach ($variant->productVariantItems as $productVariantItem)
+                                                            @if($productVariantItem->status != 0)
+                                                            <option {{$productVariantItem->is_default == 1 ? 'selected' : ''}} value="{{$productVariantItem->id}}">{{$productVariantItem->name}} (${{$productVariantItem->price}})</option>
+                                                            @endif
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                            @endif
                                         @endforeach
                                     </div>
                                 </div>
@@ -1094,88 +1103,3 @@
         RELATED PRODUCT END
     ==============================-->
 @endsection
-
-@push('scripts')
-    <script>
-        $(document).ready(function(){
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
-
-            // add product to cart
-            $('.shopping-cart-form').on('submit', function(e){
-                e.preventDefault();
-
-                // alert('hiiiii');
-
-                let formData = $(this).serialize();
-
-                // console.log(formData);
-
-                $.ajax({
-                    method: 'POST',
-                    data: formData,
-                    url: "{{route('add-to-cart')}}",
-                    success: function(data){
-                        getCartCount()
-                        fetchSidebarCartProduct()
-                        toastr.success(data.message)
-                    },
-                    error: function(data){
-                        console.log(error);
-                    }
-
-                })
-            })
-
-            function getCartCount(){
-                $.ajax({
-                    method: 'GET',
-                    url: "{{route('cart.count')}}",
-                    success: function(data){
-                        // console.log(data);
-                        $('#cart_count').text(data);
-                    },
-                    error: function(data){
-                        console.log(error);
-                    }
-
-                })
-            }
-
-            function fetchSidebarCartProduct(){
-                $.ajax({
-                    method: 'GET',
-                    url: "{{route('get-cart-product')}}",
-                    success: function(data){
-                        // console.log(data);
-                        $('.mini_cart_wrapper').html("");
-                        var html = '';
-                        for(let item in data){
-                            let product = data[item];
-                            html += `<li>
-                                        <div class="wsus__cart_img">
-                                            <a href="{{url('product-detail')}}/${product.options.slug}"><img src="{{asset('/')}}${product.options.image}" alt="product" class="img-fluid w-100"></a>
-                                            <a class="wsis__del_icon" href="#"><i class="fas fa-minus-circle"></i></a>
-                                        </div>
-                                        <div class="wsus__cart_text">
-                                            <a class="wsus__cart_title" href="{{url('product-detail')}}/${product.options.slug}">${product.name}</a>
-                                            <p>{{$generalSetting->currency_icon}} ${product.price}</p>
-                                        </div>
-                                    </li>`
-                        }
-
-                        $('.mini_cart_wrapper').html(html);
-
-                    },
-                    error: function(data){
-                        console.log(error);
-                    }
-
-                })
-            }
-        })
-    </script>
-@endpush

@@ -45,9 +45,8 @@
     <div class="wsus__mini_cart">
         <h4>shopping cart <span class="wsus_close_mini_cart"><i class="far fa-times"></i></span></h4>
         <ul class="mini_cart_wrapper">
-
             @foreach (Cart::content() as $sidebarCartProduct)
-                <li>
+                <li id="mini_cart_{{$sidebarCartProduct->rowId}}">
                     <div class="wsus__cart_img">
                         <a href="#"><img src="{{ asset($sidebarCartProduct->options->image) }}" alt="product" class="img-fluid w-100"></a>
                         <a class="wsis__del_icon remove_cart_product" data-row-id="{{$sidebarCartProduct->rowId}}" href="#"><i class="fas fa-minus-circle"></i></a>
@@ -55,14 +54,21 @@
                     <div class="wsus__cart_text">
                         <a class="wsus__cart_title" href="{{ route('product-detail.showProduct', $sidebarCartProduct->options->slug) }}">{{$sidebarCartProduct->name}}</a>
                         <p>{{$generalSetting->currency_icon}} {{$sidebarCartProduct->price}}</p>
+                        <small>Variant Total: {{$generalSetting->currency_icon}} {{$sidebarCartProduct->options->variants_total}}</small><br>
+                        <small>Qty: {{$sidebarCartProduct->qty}}</small>
                     </div>
                 </li>
             @endforeach
+            @if(Cart::content()->count() === 0)
+                <li class="text-center"> Cart is empyt!</li>
+            @endif
         </ul>
-        <h5>sub total <span>$3540</span></h5>
-        <div class="wsus__minicart_btn_area">
-            <a class="common_btn" href="{{ route('cart-details') }}">view cart</a>
-            <a class="common_btn" href="check_out.html">checkout</a>
+        <div class="mini_cart_actions {{Cart::content()->count() === 0 ? 'd-none' : ''}}">
+            <h5>sub total <span id="mini_cart_subtotal">{{$generalSetting->currency_icon}}{{getCartTotal()}}</span></h5>
+            <div class="wsus__minicart_btn_area">
+                <a class="common_btn" href="{{ route('cart-details') }}">view cart</a>
+                <a class="common_btn" href="check_out.html">checkout</a>
+            </div>
         </div>
     </div>
 
