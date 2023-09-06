@@ -45,4 +45,8 @@ class CheckOutController extends Controller
 
         return redirect()->back();
     }
+
+    public function checkOutFormSubmit (Request $request){
+        dd($request->all());
+    }
 }

@@ -29,7 +29,6 @@
     ==============================-->
     <section id="wsus__cart_view">
         <div class="container">
-            <form class="wsus__checkout_form">
                 <div class="row">
                     <div class="col-xl-8 col-lg-7">
                         <div class="wsus__check_form">
@@ -99,11 +98,10 @@
                                 <input type="hidden" name="shipping_method_id" id="shipping_method_id" value="">
                                 <input type="hidden" name="shipping_address_id" id="shipping_address_id" value="">
                             </form>
-                            <a href="payment.html" class="common_btn">Place Order</a>
+                            <a href="" id="submitCheckOutForm" class="common_btn">Place Order</a>
                         </div>
                     </div>
                 </div>
-            </form>
         </div>
     </section>
 
@@ -232,6 +230,41 @@
             $('.shipping_address').on('click', function(){
                 // alert($(this).data('id'));
                 $('#shipping_address_id').val($(this).data('id'));
+            })
+
+            // submit checkout form
+            $('#submitCheckOutForm').on('click', function(event){
+                event.preventDefault();
+                // alert('hi');
+                if ($('#shipping_method_id').val() == "") {
+                    toastr.error("Shipping Method Is Requered")
+                } else if($('#shipping_address_id').val() == "") {
+                    toastr.error("Shipping Address Is Requered")
+                }else{
+                    $.ajax({
+                        url: "{{route('user.checkout.form-submit')}}",
+                        method: 'POST',
+                        data: $('#checkOutForm').serialize(),
+                        success: function(data){
+                            console.log(data);
+                            // if(data.status === 'success'){
+                            //     let productId = '#'+rowId;
+                            //     let totalAmount = "{{$generalSetting->currency_icon}}"+data.product_total
+                            //     $(productId).text(data.product_total)
+                            //     // console.log(data.product_total);
+                            //     toastr.success(data.message)
+
+                            //     getCartSubTotal()
+                            //     calculateCouponDescount()
+                            // }else {
+                            //     toastr.error(data.message)
+                            // }
+                        },
+                        error: function(data){
+                            console.log(data);
+                        }
+                    })
+                }
             })
         })
     </script>
