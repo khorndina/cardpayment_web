@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\backend\AdminController;
+use App\Http\Controllers\backend\CheckOutController;
 use App\Http\Controllers\backend\VendorController;
 use App\Http\Controllers\frontend\CartController;
 use App\Http\Controllers\frontend\FlashSaleController;
@@ -81,6 +82,10 @@ Route::get('get-cart-product', [CartController::class, 'getCartProducts'])->name
 Route::post('cart-remove-product-sidebar', [CartController::class, 'removeSidebarProduct'])->name('cart.remove-product-sidebar');
 Route::get('cart/sidebar-product-total', [CartController::class, 'cartTotal'])->name('cart.sidebar-product-total');
 
+// Coupon Route
+Route::get('apply-coupon', [CartController::class, 'applyCoupon'])->name('apply-coupon');
+Route::get('coupon-calculation', [CartController::class, 'couponCalculation'])->name('coupon-calculation');
+
 /**user profile route */
 Route::group(['middleware' => ['auth', 'verified'], 'prefix' => 'user', 'as' => 'user.'], function(){
     Route::get('dashboard', [UserDashboardController::class, 'index'])->name('dashboard');
@@ -90,4 +95,8 @@ Route::group(['middleware' => ['auth', 'verified'], 'prefix' => 'user', 'as' => 
 
     // address route
     Route::resource('address', UserAddressController::class);
+
+    // check out Route
+    Route::get('checkout', [CheckOutController::class, 'index'])->name('checkout');
+    Route::post('checkout/create-address', [CheckOutController::class, 'createAddress'])->name('checkout.address.create');
 });

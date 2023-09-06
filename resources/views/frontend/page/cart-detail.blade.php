@@ -62,7 +62,7 @@
                                         </th> --}}
 
                                         <th class="wsus__pro_icon">
-                                            <a href="#" class="common_btn clear_cart">clear cart</a>
+                                            <a href="{{ route('home') }}" class="common_btn clear_cart">clear cart</a>
                                         </th>
                                     </tr>
                                     @foreach ($cartItems as $cartItem)
@@ -122,17 +122,14 @@
                     <div class="wsus__cart_list_footer_button" id="sticky_sidebar">
                         <h6>total cart</h6>
                         <p>subtotal: <span id="sub_total">{{$generalSetting->currency_icon}}{{getCartTotal()}}</span></p>
-                        <p>delivery: <span>$00.00</span></p>
-                        <p>discount: <span>$10.00</span></p>
-                        <p class="total"><span>total:</span> <span>$134.00</span></p>
-
-                        <form>
-                            <input type="text" placeholder="Coupon Code">
+                        <p>discount: <span id="discount">{{$generalSetting->currency_icon}}{{getCartDiscount()}}</span></p>
+                        <p class="total"><span>total:</span> <span id="cart_total">{{$generalSetting->currency_icon}}{{getMainCartTotal()}}</span></p>
+                        <form id="coupon_form">
+                            <input type="text" placeholder="Coupon Code" name="coupon_code" value="{{session()->has('coupon') ? session()->get('coupon')['coupon_code'] : ''}}">
                             <button type="submit" class="common_btn">apply</button>
                         </form>
-                        <a class="common_btn mt-4 w-100 text-center" href="check_out.html">checkout</a>
-                        <a class="common_btn mt-1 w-100 text-center" href="product_grid_view.html"><i
-                                class="fab fa-shopify"></i> go shop</a>
+                        <a class="common_btn mt-4 w-100 text-center" href="{{ route('user.checkout') }}">checkout</a>
+                        <a class="common_btn mt-1 w-100 text-center" href="{{ route('home') }}"><i class="fab fa-shopify"></i> go shop</a>
                     </div>
                 </div>
             </div>
@@ -208,11 +205,12 @@
                             $(productId).text(data.product_total)
                             // console.log(data.product_total);
                             toastr.success(data.message)
+
+                            getCartSubTotal()
+                            calculateCouponDescount()
                         }else {
                             toastr.error(data.message)
                         }
-
-                        getCartSubTotal()
                     },
                     error: function(data){
 
@@ -221,20 +219,19 @@
             })
 
 
-        // Decrement product quantity
-        $('.product-decrement').on('click', function(){
-            // event.preventDefault(); // Prevents the default behavior of the button
-            // alert('hi');
-            let input = $(this).siblings('.product-qty');
-            let quantity = parseInt(input.val()) - 1;
-            let rowId = input.data('row-id');
-            if(quantity < 1){
-                quantity = 1;
-            }
-            input.val(quantity);
-            // console.log(rowId);
-
-            $.ajax({
+            // Decrement product quantity
+            $('.product-decrement').on('click', function(){
+                // event.preventDefault(); // Prevents the default behavior of the button
+                // alert('hi');
+                let input = $(this).siblings('.product-qty');
+                let quantity = parseInt(input.val()) - 1;
+                let rowId = input.data('row-id');
+                if(quantity < 1){
+                    quantity = 1;
+                }
+                input.val(quantity);
+                // console.log(rowId);
+                $.ajax({
                     url: "{{route('cart-details.update-quantity')}}",
                     method: 'POST',
                     data: {
@@ -242,22 +239,24 @@
                         quantity: quantity
                     },
                     success: function(data){
-                        if(data.status === 'success' && quantity > 1){
+                        if(data.status === 'success'){
                             let productId = '#'+rowId;
                             $(productId).text(data.product_total)
                             // console.log(data.product_total);
                             toastr.success(data.message)
+
+                            getCartSubTotal()
+                            calculateCouponDescount()
                         }else if(data.status === 'error'){
                             toastr.error(data.message)
                         }
-
-                        getCartSubTotal()
                     },
                     error: function(data){
 
                     }
                 })
             })
+
             // clear Cart
             $('.clear_cart').on('click', function(e){
                 e.preventDefault();
@@ -289,6 +288,7 @@
                 })
             })
 
+            // Get cart subtotal
             function getCartSubTotal(){
                 $.ajax({
                     method: 'GET',
@@ -296,6 +296,48 @@
                     success: function(data){
                         // console.log(data);
                         $('#sub_total').text("{{$generalSetting->currency_icon}}"+data)
+                    },
+                    error:function(data){
+                        console.log(error);
+                    }
+                })
+            }
+
+            // apply coupon
+            $('#coupon_form').on('submit', function(e){
+                e.preventDefault();
+                let formData = $(this).serialize();
+                $.ajax({
+                    method: 'GET',
+                    url: "{{route('apply-coupon')}}",
+                    data: formData,
+                    success: function(data){
+                        // console.log(data);
+                        if(data.status === 'error'){
+                            toastr.error(data.message);
+                        }else if(data.status === 'success'){
+                            toastr.success(data.message);
+
+                            calculateCouponDescount()
+                        }
+                    },
+                    error:function(xhr, status, error){
+                        console.log(error);
+                    }
+                })
+            })
+
+            // calculate descount with coupon
+            function calculateCouponDescount(){
+                $.ajax({
+                    method: 'GET',
+                    url: "{{route('coupon-calculation')}}",
+                    success: function(data){
+                        // console.log(data);
+                        if(data.status === 'success'){
+                            $('#discount').text("{{$generalSetting->currency_icon}}"+data.discount)
+                            $('#cart_total').text("{{$generalSetting->currency_icon}}"+data.cart_total)
+                        }
                     },
                     error:function(data){
                         console.log(error);

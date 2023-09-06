@@ -1,4 +1,7 @@
 <?php
+
+use Illuminate\Support\Facades\Session;
+
 /**Set sidebar active */
 
 function setActive(array $route){
@@ -62,4 +65,96 @@ function getCartTotal(){
         $total += ($product->price + $product->options->variants_total) * $product->qty;
     }
     return $total;
+}
+
+
+// get payment total amount
+// function getMainCartTotal(){
+//     if(Session::has('coupon')){
+//         $coupon = Session::get('coupon');
+//         // dd($coupon);
+//         $subTotal = getCartTotal();
+//         if($coupon['discount_type'] === 'amount'){
+//             $total = $subTotal - $coupon['discount'];
+//             return $total;
+//         }elseif($coupon['discount_type'] === 'percent'){
+//             $discount = $subTotal - ($subTotal * $coupon['discount'] / 100);
+//             $total = $subTotal - $discount;
+//             return $total;
+//         }
+//     }else {
+//         $total = getCartTotal();
+//         return $total;
+//     }
+// }
+function getMainCartTotal(){
+    if(Session::has('coupon')){
+        $coupon = Session::get('coupon');
+        $cartItems = \Cart::content();
+        $totalDiscount = 0;
+        $subTotal = getCartTotal();
+
+        foreach ($cartItems as $item) {
+            $qty = $item->qty;
+            $discount = $coupon['discount'];
+
+            if ($coupon['discount_type'] === 'percent') {
+                $discountAmount = $item->price * ($discount / 100);
+            } else {
+                $discountAmount = $discount;
+            }
+
+            $itemDiscount = $discountAmount * $qty;
+            $totalDiscount += $itemDiscount;
+            $totla = $subTotal - $totalDiscount;
+        }
+
+        return $totla;
+    }else {
+        $total = getCartTotal();
+        return $total;
+    }
+}
+
+// get payment total amount
+// function getCartDiscount(){
+//     if(Session::has('coupon')){
+//         $coupon = Session::get('coupon');
+//         // dd($coupon);
+//         $subTotal = getCartTotal();
+//         if($coupon['discount_type'] === 'amount'){
+//             return $coupon['discount'];
+//         }elseif($coupon['discount_type'] === 'percent'){
+//             $discount = $subTotal - ($subTotal * $coupon['discount'] / 100);
+//             return $discount;
+//         }
+//     }else {
+//         return 0;
+//     }
+// }
+
+function getCartDiscount(){
+    if (Session::has('coupon')) {
+        $coupon = Session::get('coupon');
+        $cartItems = \Cart::content();
+        $totalDiscount = 0;
+
+        foreach ($cartItems as $item) {
+            $qty = $item->qty;
+            $discount = $coupon['discount'];
+
+            if ($coupon['discount_type'] === 'percent') {
+                $discountAmount = $item->price * ($discount / 100);
+            } else {
+                $discountAmount = $discount;
+            }
+
+            $itemDiscount = $discountAmount * $qty;
+            $totalDiscount += $itemDiscount;
+        }
+
+        return $totalDiscount;
+    } else {
+        return 0;
+    }
 }
