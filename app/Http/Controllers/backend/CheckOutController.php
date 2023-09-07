@@ -7,6 +7,7 @@ use App\Models\ShippingRule;
 use App\Models\UserAddress;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 
 class CheckOutController extends Controller
 {
@@ -47,6 +48,25 @@ class CheckOutController extends Controller
     }
 
     public function checkOutFormSubmit (Request $request){
-        dd($request->all());
+        // dd($request->all());
+        $request->validate([
+            'shipping_method_id' => 'required|integer',
+            'shipping_address_id' => 'required|integer'
+        ]);
+
+        $shippingMethod = ShippingRule::findOrFail($request->shipping_method_id);
+        // dd($shippingMethod);
+        Session::put('shipping_method', [
+            'id' => $shippingMethod->id,
+            'name' => $shippingMethod->name,
+            'type' => $shippingMethod->type,
+            'cost' => $shippingMethod->cost,
+        ]);
+
+        $address = UserAddress::findOrFail($request->shipping_address_id)->toArray();
+        // dd($address);
+        Session::put('address', $address);
+
+        return response(['status' => 'success', 'redirect_url' => route('user.Payment')]);
     }
 }

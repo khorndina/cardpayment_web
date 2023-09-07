@@ -32,7 +32,7 @@
                 <div class="row">
                     <div class="col-xl-8 col-lg-7">
                         <div class="wsus__check_form">
-                            <h5>Billing Details <a href="#" data-bs-toggle="modal" data-bs-target="#exampleModal">add new address</a></h5>
+                            <h5>Billing Details <a href="#" data-bs-toggle="modal" data-bs-target="#exampleModal" style="margin-left: 480px;" >add new address</a></h5>
                             <div class="row">
                                 @foreach ($userAddresses as $userAddress)
                                     <div class="col-xl-6">
@@ -87,8 +87,7 @@
                             </div>
                             <div class="terms_area">
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked3"
-                                        checked>
+                                    <input class="form-check-input agree_term" type="checkbox" value="" id="flexCheckChecked3">
                                     <label class="form-check-label" for="flexCheckChecked3">
                                         I have read and agree to the website <a href="#">terms and conditions *</a>
                                     </label>
@@ -240,25 +239,24 @@
                     toastr.error("Shipping Method Is Requered")
                 } else if($('#shipping_address_id').val() == "") {
                     toastr.error("Shipping Address Is Requered")
+                }else if(!$('.agree_term').prop('checked')){
+                    toastr.error("You have read and agree to the website Term and Agreement!")
                 }else{
                     $.ajax({
                         url: "{{route('user.checkout.form-submit')}}",
                         method: 'POST',
                         data: $('#checkOutForm').serialize(),
+                        beforeSend: function(){
+                            $('#submitCheckOutForm').html('<i class="fas fa-spinner fa-spin fa-1x"></i>')
+                        },
                         success: function(data){
-                            console.log(data);
-                            // if(data.status === 'success'){
-                            //     let productId = '#'+rowId;
-                            //     let totalAmount = "{{$generalSetting->currency_icon}}"+data.product_total
-                            //     $(productId).text(data.product_total)
-                            //     // console.log(data.product_total);
-                            //     toastr.success(data.message)
+                            // console.log(data);
+                            if(data.status === 'success'){
+                                $('#submitCheckOutForm').text('Place Order')
 
-                            //     getCartSubTotal()
-                            //     calculateCouponDescount()
-                            // }else {
-                            //     toastr.error(data.message)
-                            // }
+                                // redirect user to payment page
+                                window.location.href = data.redirect_url;
+                            }
                         },
                         error: function(data){
                             console.log(data);

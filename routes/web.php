@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\backend\AdminController;
 use App\Http\Controllers\backend\CheckOutController;
+use App\Http\Controllers\backend\PaymentController;
 use App\Http\Controllers\backend\VendorController;
 use App\Http\Controllers\frontend\CartController;
 use App\Http\Controllers\frontend\FlashSaleController;
@@ -100,4 +101,7 @@ Route::group(['middleware' => ['auth', 'verified'], 'prefix' => 'user', 'as' => 
     Route::get('checkout', [CheckOutController::class, 'index'])->name('checkout');
     Route::post('checkout/create-address', [CheckOutController::class, 'createAddress'])->name('checkout.address.create');
     Route::post('checkout/form-submit', [CheckOutController::class, 'checkOutFormSubmit'])->name('checkout.form-submit');
+
+    // Payment Routes
+    Route::get('Payment', [PaymentController::class, 'index'])->name('Payment');
 });
