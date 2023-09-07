@@ -45,9 +45,9 @@
                                                 <li><span>Name :</span> {{$userAddress->name}}</li>
                                                 <li><span>Phone :</span> {{$userAddress->phone}}</li>
                                                 <li><span>Email :</span> {{$userAddress->email}}</li>
-                                                <li><span>Country :</span> {{$userAddress->country}}</li>
-                                                <li><span>City :</span> {{$userAddress->city}}</li>
-                                                <li><span>Zip Code :</span> {{$userAddress->zip}}</li>
+                                                {{-- <li><span>Country :</span> {{$userAddress->country}}</li> --}}
+                                                {{-- <li><span>City :</span> {{$userAddress->city}}</li>
+                                                <li><span>Zip Code :</span> {{$userAddress->zip}}</li> --}}
                                                 <li><span>Address :</span> {{$userAddress->address}}</li>
                                             </ul>
                                         </div>
@@ -85,6 +85,29 @@
                                 <p>Coupon: <span></span>{{$generalSetting->currency_icon}}{{getCartDiscount()}}</p>
                                 <p><b>total:</b> <span id="total_fee" data-id="{{getMainCartTotal()}}"><b>{{$generalSetting->currency_icon}}{{getMainCartTotal()}}</b></span></p>
                             </div>
+
+                            <!-- Payment Method -->
+                            <div class="wsus__payment_method">
+                                <p class="wsus__product">Payment Methods</p>
+                                <div class="form-check">
+                                    <input class="form-check-input card_payment" type="radio" name="exampleRadios" id="exampleRadios1" value="card_payment" data-id="card_payment">
+                                    <label class="form-check-label" for="exampleRadios1">
+                                        Card Payment:
+                                        <img width="55px" height="35px" src="{{ asset('frontend/images/payment1.png') }}" alt="payment" class="img-fluid">
+                                        <img width="55px" height="35px" src="{{ asset('frontend/images/payment2.png') }}" alt="payment" class="img-fluid">
+                                        <img width="55px" height="35px" src="{{ asset('frontend/images/unionpay-logo.png') }}" alt="payment" class="img-fluid">
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input other_payment" type="radio" name="exampleRadios" id="exampleRadios1" value="other_payment" data-id="other_payment">
+                                    <label class="form-check-label" for="exampleRadios1">
+                                        Others:
+                                        <img width="55px" height="35px" src="{{ asset('frontend/images/payment3.png') }}" alt="payment" class="img-fluid">
+                                    </label>
+                                </div>
+                            </div>
+                            <!-- End Payment Method -->
+
                             <div class="terms_area">
                                 <div class="form-check">
                                     <input class="form-check-input agree_term" type="checkbox" value="" id="flexCheckChecked3">

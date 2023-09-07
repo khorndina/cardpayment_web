@@ -87,6 +87,8 @@ function getCartTotal(){
 //         return $total;
 //     }
 // }
+
+// get payment total amount
 function getMainCartTotal(){
     if(Session::has('coupon')){
         $coupon = Session::get('coupon');
@@ -116,7 +118,7 @@ function getMainCartTotal(){
     }
 }
 
-// get payment total amount
+// get Cart Discount
 // function getCartDiscount(){
 //     if(Session::has('coupon')){
 //         $coupon = Session::get('coupon');
@@ -133,6 +135,7 @@ function getMainCartTotal(){
 //     }
 // }
 
+// get Cart Discount
 function getCartDiscount(){
     if (Session::has('coupon')) {
         $coupon = Session::get('coupon');
@@ -157,4 +160,19 @@ function getCartDiscount(){
     } else {
         return 0;
     }
+}
+
+// get selected shipping Fee from session
+function getShippingFee(){
+    if(Session::has('shipping_method')){
+        return Session::get('shipping_method')['cost'];
+    }else{
+        return 0;
+    }
+}
+
+
+// get final Payment
+function getFinalPayment(){
+    return getMainCartTotal() + getShippingFee();
 }

@@ -333,8 +333,9 @@
                     method: 'GET',
                     url: "{{route('coupon-calculation')}}",
                     success: function(data){
-                        // console.log(data);
+                        console.log(data);
                         if(data.status === 'success'){
+                            // $('#discount').text("{{$generalSetting->currency_icon}}"+data.total_discount)
                             $('#discount').text("{{$generalSetting->currency_icon}}"+data.discount)
                             $('#cart_total').text("{{$generalSetting->currency_icon}}"+data.cart_total)
                         }

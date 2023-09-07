@@ -249,7 +249,7 @@ p {
 }
 
 .wsus__topbar_dropdown li a:hover {
-  background: #aad8ff73;
+  background: #ffffff;
   color: #007aff;
 }
 
@@ -9572,3 +9572,26 @@ a:not([href]):not([class]):hover {
         background-color: #006699 !important; }
     .btn-primary:active, .btn-primary:hover, .btn-primary.disabled:active, .btn-primary.disabled:hover {
       background-color: #006699 !important; }
+.wsus__payment_method {
+    border-bottom: 1px solid #eee;
+    margin-bottom: 17px;
+}
+
+.wsus__payment_method p {
+    display: flex;
+    justify-content: space-between;
+    text-transform: capitalize;
+    color: #0b2c3d;
+    margin: 15px 0px;
+}
+
+.wsus__payment_method p span {
+    color: #0b2c3d;
+}
+
+.container-fluid {
+    display: flex;
+    justify-content: center;
+    /* align-items: center; */
+    height: 100vh;
+}

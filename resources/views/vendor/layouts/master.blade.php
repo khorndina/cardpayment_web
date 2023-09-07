@@ -55,6 +55,31 @@
       <p>anik roy</p>
     </div>
   </div>
+
+   {{-- Test use dropdown --}}
+  {{-- <div class="wsus__dashboard_menu">
+    <div class="wsusd__dashboard_user">
+        <li class="dropdown"><a href="#" data-toggle="dropdown" class="nav-link dropdown-toggle nav-link-lg nav-link-user">
+            <img alt="image" src="{{ asset('frontend/images/avtar.jpg') }}" class="rounded-circle mr-1">
+            <div class="d-sm-none d-lg-inline-block">Hi, {{Auth::user()->name}}</div></a>
+            <div class="dropdown-menu dropdown-menu-right">
+              <div class="dropdown-title">Logged in 5 min ago</div>
+              <a href="{{ route('admin.profile') }}" class="dropdown-item has-icon">
+                <i class="far fa-user"></i> Profile
+              </a>
+              <div class="dropdown-divider"></div>
+                <!-- Authentication -->
+                <form method="POST" action="{{ route('logout') }}">
+                @csrf
+                <a href="{{ route('logout') }}" onclick="event.preventDefault(); this.closest('form').submit();" class="dropdown-item has-icon text-danger">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                    </a>
+                </form>
+            </div>
+          </li>
+    </div>
+  </div> --}}
+
   <!--=============================
     DASHBOARD MENU END
   ==============================-->

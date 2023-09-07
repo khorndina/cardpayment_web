@@ -104,4 +104,6 @@ Route::group(['middleware' => ['auth', 'verified'], 'prefix' => 'user', 'as' => 
 
     // Payment Routes
     Route::get('Payment', [PaymentController::class, 'index'])->name('Payment');
+    Route::post('payment/create', [PaymentController::class, 'createPayment'])->name('payment.create');
+    Route::post('orders/{paramCallBack}', [PaymentController::class, 'processoder']);
 });
