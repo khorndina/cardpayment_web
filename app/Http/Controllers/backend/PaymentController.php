@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\backend;
 
+use App\DataTables\PaymentDataTable;
 use App\Http\Controllers\Controller;
 use App\Models\Payment;
 use Illuminate\Http\Request;
@@ -290,7 +291,7 @@ class PaymentController extends Controller
         }
     }
 
-    public function processoder(Request $request, string $paramCallBack)
+    public function processoder(Request $request, string $paramCallBack, PaymentDataTable $dataTable)
     {
         $data = base64_decode($paramCallBack);
         $data = json_decode($data, true);
@@ -305,9 +306,10 @@ class PaymentController extends Controller
         // dd($data);
         $cvv2=123;
 
-        $proCre =$this->ProcessCres($data['mid'], $data['orderId'], $data['sessionId'],$cres, $data['pan'], $data['exp'], $cvv2,$data['payment_type']);
+        $proCre =$this->ProcessCres($data['mid'], $data['orderId'], $data['sessionId'],$cres, $data['pan'], $data['exp'], $cvv2, $data['payment_type']);
 
-        return view('frontend.page.paymentdata');
+        // return view('frontend.page.paymentdata');
+        return $dataTable->render('frontend.page.paymentdata');
     }
 
     public function ProcessCres($merchantId, $orderId, $sessionId, $cres, $pan, $exp, $cvv2,$payment_type)
