@@ -2,7 +2,7 @@
 
 @section('content')
     <section id="wsus__dashboard">
-    <div class="container-fluid">
+    <div>
 
         @include('vendor.layouts.sidebar')
 

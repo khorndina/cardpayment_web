@@ -6,15 +6,13 @@
 
 @section('content')
     <section id="wsus__dashboard">
-    <div class="container-fluid">
-
+    <div>
         @include('frontend.dashboard.layouts.sidebar')
-
         <div class="row">
             <div class="col-xl-9 col-xxl-10 col-lg-9 ms-auto">
-              <div class="dashboard_content">
+              <div class="dashboard_content mt-2 mt-md-0">
                 <h3><i class="fal fa-gift-card"></i> address</h3>
-                <div class="wsus__dashboard_add">
+                <div class="wsus__dashboard_add wsus__add_address">
                   <div class="row">
                     @foreach ($addresses as $addresse)
                     <div class="col-xl-6">
@@ -44,7 +42,6 @@
               </div>
             </div>
           </div>
-
     </div>
   </section>
 @endsection

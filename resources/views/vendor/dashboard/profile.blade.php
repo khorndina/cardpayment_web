@@ -2,7 +2,8 @@
 
 @section('content')
     <section id="wsus__dashboard">
-    <div class="container-fluid">
+    <div>
+        {{-- class="container-fluid" --}}
 
         @include('vendor.layouts.sidebar')
 
@@ -24,14 +25,14 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-12 mt-5">
+                            <div class="col-md-8 mt-5">
                             <div class="wsus__dash_pro_single">
                                 <i class="fas fa-user-tie"></i>
                                 <input id="name" name="name" type="text" placeholder="Name" value="{{Auth::user()->name}}">
                             </div>
                             </div>
 
-                            <div class="col-md-12">
+                            <div class="col-md-8">
                             <div class="wsus__dash_pro_single">
                                 <i class="fal fa-envelope-open"></i>
                                 <input id="email" name="email" type="email" placeholder="Email" value="{{Auth::user()->email}}">
