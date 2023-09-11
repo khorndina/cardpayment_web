@@ -8,6 +8,7 @@ use App\Http\Controllers\frontend\CartController;
 use App\Http\Controllers\frontend\FlashSaleController;
 use App\Http\Controllers\frontend\FrontendProductController;
 use App\Http\Controllers\Frontend\HomeController;
+use App\Http\Controllers\frontend\TransactionManagementController;
 use App\Http\Controllers\frontend\UserAddressController;
 use App\Http\Controllers\Frontend\UserDashboardController;
 use App\Http\Controllers\Frontend\UserProfileController;
@@ -87,6 +88,9 @@ Route::get('cart/sidebar-product-total', [CartController::class, 'cartTotal'])->
 Route::get('apply-coupon', [CartController::class, 'applyCoupon'])->name('apply-coupon');
 Route::get('coupon-calculation', [CartController::class, 'couponCalculation'])->name('coupon-calculation');
 
+// Routes to ACS PAGE and Return Paramater back
+Route::post('orders/{paramCallBack}', [PaymentController::class, 'processoder']);
+
 /**user profile route */
 Route::group(['middleware' => ['auth', 'verified'], 'prefix' => 'user', 'as' => 'user.'], function(){
     Route::get('dashboard', [UserDashboardController::class, 'index'])->name('dashboard');
@@ -105,5 +109,7 @@ Route::group(['middleware' => ['auth', 'verified'], 'prefix' => 'user', 'as' => 
     // Payment Routes
     Route::get('Payment', [PaymentController::class, 'index'])->name('Payment');
     Route::post('payment/create', [PaymentController::class, 'createPayment'])->name('payment.create');
-    Route::post('orders/{paramCallBack}', [PaymentController::class, 'processoder']);
+
+    // Transaction Management Routes
+    Route::get('transaction-management', [TransactionManagementController::class, 'index'])->name('transaction-management');
 });

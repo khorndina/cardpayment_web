@@ -79,10 +79,12 @@ class PaymentController extends Controller
         echo '<h1>Request Check3DS Auth</h1>';
         var_dump($data);
         echo '<h6>----------------------------------------------</h6>';
-        if($payment_type=='TXPG'){
+        if($payment_type=='txpg'){
             $exec="http://10.6.2.25:8890/Exec";
             $header_=['Content-Type: application/octet-stream', 'merchantCN: '.$merchantId];
             $xmlResp = $this->executeXml($data,$exec,$header_);
+
+            value($xmlResp);
 
             return $xmlResp;
 
@@ -112,7 +114,8 @@ class PaymentController extends Controller
 
         $paramCallBack = str_replace('/', '--', $paramCallBack);
 
-        $url = 'http://10.6.2.8:8888/payment-api/public/orders/'.$paramCallBack;
+        // $url = "http://10.6.2.8:8888/cardpayment_web/public/orders/".$paramCallBack;
+        $url = "http://localhost:8888/cardpayment_web/public/orders/".$paramCallBack;
         $bankid=10065380;
         $start='*';
         $requestorID=($bankid.$start.$merchantId);
@@ -156,15 +159,15 @@ class PaymentController extends Controller
             </Request>
         </TKKPG>';
 
-        if($payment_type=='TXPG'){
+        if($payment_type=='txpg'){
             $exec="http://10.6.2.25:8890/Exec";
             $header_=['Content-Type: application/octet-stream', 'merchantCN: '.$merchantId];
-            $xmlResp = $this->executeXml($data,$exec,$header_);
+            $xmlResp = $this->executeXml($data, $exec, $header_);
             var_dump($xmlResp);
             $acs = (string) $xmlResp->Response->Refinement->AcsURL;
             $creq = (string) $xmlResp->Response->Refinement->CReq;
 
-            $xmlResp= $this->setDataForm($paramCallBack,$acs,$creq);
+            $xmlResp= $this->setDataForm($paramCallBack, $acs, $creq);
 
             return $xmlResp;
 
@@ -210,15 +213,19 @@ class PaymentController extends Controller
 
         // Call the CreateOrder function
         $merchantId = '316100770110001';
-        $amount = $request->input('amount');
-        $pan= $request->input('card_number');
-        $exp= $request->input('exp_date');
-        $payment_type= $request->input('payment_type');
+        $amount = $request->amount;
+        $pan= $request->card_number;
+        $exp= $request->exp_date;
+        $payment_type= $request->payment_type;
 
-        echo $payment_type;
-        echo $pan;
-        echo $exp;
-        $xmlResp = $this->createOrder($merchantId, $amount,$pan,$exp,$payment_type);
+        // $data = $merchantId.", ".$amount.", ".$pan.", ".$exp.", ".$payment_type;
+        // dd($data);
+
+        // echo $payment_type;
+        // echo $pan;
+        // echo $exp;
+
+        $xmlResp = $this->createOrder($merchantId, $amount, $pan, $exp, $payment_type);
 
         $orderId = $xmlResp['OrderID'];
         $sessionId = $xmlResp['SessionID'];
@@ -246,7 +253,7 @@ class PaymentController extends Controller
         }
     }
 
-    public function createOrder($merchantId, $amount,$pan,$exp,$payment_type)
+    public function createOrder($merchantId, $amount, $pan, $exp, $payment_type)
     {
         $resp ='@fee:0@cur:USD@payout:{"payees":[{"mtxnid":"1688615455782386-1","mid":"122092016015926","amt":"0.50","ccy":"840"},{"mtxnid":"1688615455782386-2","mid":"122091511120425","amt":"0.50","ccy":"840"}]}@merchanttranid:16886119155@';
         $dd = htmlspecialchars($resp);
@@ -266,10 +273,11 @@ class PaymentController extends Controller
 				</Order>
 			</Request>
 		</TKKPG>';
-        if($payment_type=='TXPG'){
+        if($payment_type=='txpg'){
             $exec="http://10.6.2.25:8890/Exec";
             $header_=['Content-Type: application/octet-stream', 'merchantCN: '.$merchantId];
             $xmlResp = $this->executeXml($data,$exec,$header_);
+            var_dump($xmlResp);
             $sessionId = (string) $xmlResp->Response->Order->SessionID;
             $orderId = (string) $xmlResp->Response->Order->OrderID;
             $xmlResp = $this->processFirst($sessionId, $merchantId, $orderId, $pan, $exp,$payment_type);
@@ -285,7 +293,6 @@ class PaymentController extends Controller
         $orderId = (string) $xmlResp->Response->Order->OrderID;
         $xmlResp = $this->processFirst($sessionId, $merchantId, $orderId, $pan, $exp,$payment_type);
         $xmlResp = $this->proccessAreq($merchantId, $orderId,$sessionId,$pan,$exp,$amount,$payment_type);
-
 
         return ['OrderID' => $orderId, 'SessionID' => $sessionId];
         }
@@ -306,10 +313,11 @@ class PaymentController extends Controller
         // dd($data);
         $cvv2=123;
 
-        $proCre =$this->ProcessCres($data['mid'], $data['orderId'], $data['sessionId'],$cres, $data['pan'], $data['exp'], $cvv2, $data['payment_type']);
+        $proCre =$this->ProcessCres($data['mid'], $data['orderId'], $data['sessionId'], $cres, $data['pan'], $data['exp'], $cvv2, $data['payment_type']);
 
         // return view('frontend.page.paymentdata');
-        return $dataTable->render('frontend.page.paymentdata');
+        toastr('Payment Successfully!','success');
+        return redirect()->route('home');
     }
 
     public function ProcessCres($merchantId, $orderId, $sessionId, $cres, $pan, $exp, $cvv2,$payment_type)
@@ -336,17 +344,18 @@ class PaymentController extends Controller
         // var_dump($data);
         // echo '<h6>----------------------------------------------</h6>';
 
-        if($payment_type=='TXPG'){
+        if($payment_type=='txpg'){
             $exec="http://10.6.2.25:8890/Exec";
             $header_=['Content-Type: application/octet-stream', 'merchantCN: '.$merchantId];
-            $xmlResp = $this->executeXml($data,$exec,$header_);
+            $xmlResp = $this->executeXml($data, $exec, $header_);
+
             var_dump($xmlResp);
             return $xmlResp;
 
         }else{
             $exec= "http://10.6.2.8:8068/exec";
             $header_=['Content-Type: application/x-www-form-urlencoded', 'merchantCN: '.$merchantId];
-            $xmlResp = $this->executeXml($data,$exec,$header_);
+            $xmlResp = $this->executeXml($data, $exec, $header_);
 
             return $xmlResp;
 
