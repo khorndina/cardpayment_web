@@ -110,6 +110,9 @@ Route::group(['middleware' => ['auth', 'verified'], 'prefix' => 'user', 'as' => 
     Route::get('Payment', [PaymentController::class, 'index'])->name('Payment');
     Route::post('payment/create', [PaymentController::class, 'createPayment'])->name('payment.create');
 
+    // Routes to ACS PAGE and Return Paramater back
+    // Route::post('orders/{paramCallBack}', [PaymentController::class, 'processoder']);
+
     // Transaction Management Routes
     Route::get('transaction-management', [TransactionManagementController::class, 'index'])->name('transaction-management');
 });

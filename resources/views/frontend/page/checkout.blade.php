@@ -90,8 +90,8 @@
                             <div class="wsus__payment_method">
                                 <p class="wsus__product">Payment Methods</p>
                                 <div class="form-check">
-                                    <input class="form-check-input card_payment" type="radio" name="exampleRadios" id="exampleRadios1" value="card_payment" data-id="card_payment">
-                                    <label class="form-check-label" for="exampleRadios1">
+                                    <input class="form-check-input card_payment" type="radio" name="paymentMethod" id="paymentMethodRadios" value="card_payment" data-id="card_payment">
+                                    <label class="form-check-label" for="paymentMethodRadios">
                                         Card Payment:
                                         <img width="55px" height="35px" src="{{ asset('frontend/images/payment1.png') }}" alt="payment" class="img-fluid">
                                         <img width="55px" height="35px" src="{{ asset('frontend/images/payment2.png') }}" alt="payment" class="img-fluid">
@@ -99,8 +99,8 @@
                                     </label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input other_payment" type="radio" name="exampleRadios" id="exampleRadios1" value="other_payment" data-id="other_payment">
-                                    <label class="form-check-label" for="exampleRadios1">
+                                    <input class="form-check-input other_payment" type="radio" name="paymentMethod" id="paymentMethodRadios" value="other_payment" data-id="other_payment">
+                                    <label class="form-check-label" for="paymentMethodRadios">
                                         Others:
                                         <img width="55px" height="35px" src="{{ asset('frontend/images/payment3.png') }}" alt="payment" class="img-fluid">
                                     </label>
