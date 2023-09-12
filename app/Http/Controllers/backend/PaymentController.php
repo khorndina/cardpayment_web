@@ -114,8 +114,8 @@ class PaymentController extends Controller
 
         $paramCallBack = str_replace('/', '--', $paramCallBack);
 
-        // $url = "http://10.6.2.8:8888/cardpayment_web/public/orders/".$paramCallBack;
-        $url = "http://localhost:8888/cardpayment_web/public/orders/".$paramCallBack;
+        $url = "http://10.6.2.8:8888/cardpayment_web/public/orders/".$paramCallBack;
+        // $url = "http://localhost:8888/cardpayment_web/public/orders/".$paramCallBack;
         $bankid=10065380;
         $start='*';
         $requestorID=($bankid.$start.$merchantId);
@@ -296,6 +296,44 @@ class PaymentController extends Controller
 
         return ['OrderID' => $orderId, 'SessionID' => $sessionId];
         }
+    }
+
+    /**Get Order Status */
+    public function getOrderStatus($sessionId, $merchantId, $orderId, $payment_type)
+    {
+        $data = '<?xml version="1.0" encoding="UTF-8"?>
+        <TKKPG>
+            <Request>
+                <Operation>GetOrderStatus</Operation>
+                <Language>EN</Language>
+                <Order>
+                    <Merchant>316100770110001</Merchant>
+                    <OrderID>592671</OrderID>
+                </Order>
+                <SessionID>1CF68F6CDEBF19842A2F59C61EE79664</SessionID>
+            </Request>
+        </TKKPG>';
+
+        echo '<h1>Request Check3DS Auth</h1>';
+        var_dump($data);
+        echo '<h6>----------------------------------------------</h6>';
+        if($payment_type=='txpg'){
+            $exec="http://10.6.2.25:8890/Exec";
+            $header_=['Content-Type: application/octet-stream', 'merchantCN: '.$merchantId];
+            $xmlResp = $this->executeXml($data,$exec,$header_);
+
+            value($xmlResp);
+
+            return $xmlResp;
+
+        }else{
+            $exec= "http://10.6.2.8:8068/exec";
+            $header_=['Content-Type: application/x-www-form-urlencoded', 'merchantCN: '.$merchantId];
+            $xmlResp = $this->executeXml($data,$exec,$header_);
+
+            return $xmlResp;
+        }
+        //var_dump($xml);
     }
 
     public function processoder(Request $request, string $paramCallBack, PaymentDataTable $dataTable)
