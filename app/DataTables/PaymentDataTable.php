@@ -4,6 +4,7 @@ namespace App\DataTables;
 
 use App\Models\Payment;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
+use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
 use Yajra\DataTables\Html\Button;
@@ -29,6 +30,10 @@ class PaymentDataTable extends DataTable
 
                 return $btnComplete.$btnRefund.$btnReverse;
             })
+            ->addColumn('pan', function($query){
+                $masked_pan = substr($query->pan, 0, 6) . str_repeat('*', 6) . substr($query->pan, -4);
+                return $masked_pan;
+            })
             ->addColumn('order_date', function($query){
                 return $query->created_at->format('d-m-Y');
             })
@@ -40,7 +45,7 @@ class PaymentDataTable extends DataTable
      */
     public function query(Payment $model): QueryBuilder
     {
-        return $model->newQuery();
+        return $model->where('user_id', Auth::user()->id)->newQuery();
     }
 
     /**
@@ -53,7 +58,7 @@ class PaymentDataTable extends DataTable
                     ->columns($this->getColumns())
                     ->minifiedAjax()
                     //->dom('Bfrtip')
-                    ->orderBy(7)
+                    ->orderBy(0, 'desc')
                     ->selectStyleSingle()
                     ->buttons([
                         Button::make('excel'),
@@ -76,7 +81,8 @@ class PaymentDataTable extends DataTable
             Column::make('mid'),
             Column::make('pan'),
             Column::make('amount'),
-            Column::make('payment_type'),
+            Column::make('orderstatus'),
+            // Column::make('payment_type'),
             Column::make('order_date'),
             Column::computed('action')
                   ->exportable(false)

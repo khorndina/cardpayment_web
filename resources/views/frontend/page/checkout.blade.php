@@ -220,32 +220,6 @@
                 $('#shipping_method_id').val($(this).val());
                 $('#shipping_fee').text("{{$generalSetting->currency_icon}}"+shippingFee);
                 $('#total_fee').text("{{$generalSetting->currency_icon}}"+totalAmount);
-
-                // $.ajax({
-                //     url: "{{route('cart-details.update-quantity')}}",
-                //     method: 'POST',
-                //     data: {
-                //         rowId : rowId,
-                //         quantity: quantity
-                //     },
-                //     success: function(data){
-                //         if(data.status === 'success'){
-                //             let productId = '#'+rowId;
-                //             let totalAmount = "{{$generalSetting->currency_icon}}"+data.product_total
-                //             $(productId).text(data.product_total)
-                //             // console.log(data.product_total);
-                //             toastr.success(data.message)
-
-                //             getCartSubTotal()
-                //             calculateCouponDescount()
-                //         }else {
-                //             toastr.error(data.message)
-                //         }
-                //     },
-                //     error: function(data){
-
-                //     }
-                // })
             })
 
             // Add shipping address to checkout form

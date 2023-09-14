@@ -88,8 +88,9 @@ Route::get('cart/sidebar-product-total', [CartController::class, 'cartTotal'])->
 Route::get('apply-coupon', [CartController::class, 'applyCoupon'])->name('apply-coupon');
 Route::get('coupon-calculation', [CartController::class, 'couponCalculation'])->name('coupon-calculation');
 
-// Routes to ACS PAGE and Return Paramater back
-Route::post('orders/{paramCallBack}', [PaymentController::class, 'processoder']);
+/**Routes to ACS PAGE and Return Paramater back */
+// Route::post('orders/{paramCallBack}', [PaymentController::class, 'processoder']);
+Route::post('payment-payout', [PaymentController::class, 'processoder'])->name('payment.payout');
 
 /**user profile route */
 Route::group(['middleware' => ['auth', 'verified'], 'prefix' => 'user', 'as' => 'user.'], function(){
@@ -107,12 +108,16 @@ Route::group(['middleware' => ['auth', 'verified'], 'prefix' => 'user', 'as' => 
     Route::post('checkout/form-submit', [CheckOutController::class, 'checkOutFormSubmit'])->name('checkout.form-submit');
 
     // Payment Routes
-    Route::get('Payment', [PaymentController::class, 'index'])->name('Payment');
+    Route::get('payment', [PaymentController::class, 'index'])->name('payment');
     Route::post('payment/create', [PaymentController::class, 'createPayment'])->name('payment.create');
 
-    // Routes to ACS PAGE and Return Paramater back
+    /**Routes to ACS PAGE and Return Paramater back */
     // Route::post('orders/{paramCallBack}', [PaymentController::class, 'processoder']);
+    // Route::post('payment-payout', [PaymentController::class, 'processoder'])->name('payment.payout');
 
     // Transaction Management Routes
     Route::get('transaction-management', [TransactionManagementController::class, 'index'])->name('transaction-management');
+
+    /**User Home Page */
+    Route::get('home',[HomeController::class, 'index'])->name('home');
 });

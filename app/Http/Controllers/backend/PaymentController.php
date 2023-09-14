@@ -6,6 +6,7 @@ use App\DataTables\PaymentDataTable;
 use App\Http\Controllers\Controller;
 use App\Models\Payment;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 
 class PaymentController extends Controller
@@ -17,6 +18,138 @@ class PaymentController extends Controller
         }
 
         return view('frontend.page.payment');
+    }
+
+    public function createPayment(Request $request)
+    {
+        // dd($request->all());
+
+        // Validate the request data
+        $validatedData = $request->validate([
+            'amount' => 'required|numeric',
+            'card_number' => 'required|digits:16',
+            'exp_date' => 'required|digits:4'
+        ]);
+
+        // Call the CreateOrder function
+        $merchantId = '316100770110001';
+        $amount = $request->amount;
+        $pan= $request->card_number;
+        $exp= $request->exp_date;
+        $payment_type= $request->payment_type;
+        // $data = $merchantId.", ".$amount.", ".$pan.", ".$exp.", ".$payment_type;
+        // dd($data);
+
+        $xmlResp = $this->createOrder($merchantId, $amount, $pan, $exp, $payment_type);
+        $orderId = $xmlResp['OrderID'];
+        $sessionId = $xmlResp['SessionID'];
+
+        $xmlResp_getOrderStatus = $this->getOrderStatus($sessionId, $merchantId, $orderId, $payment_type);
+        $orderStatus = (string)$xmlResp_getOrderStatus->Response->Order->OrderStatus;
+
+        // Process the response and return a JSON response
+        if ($xmlResp) {
+            // Process the XML response and extract the required data
+            // Add more data extraction as needed
+            $payment = Payment::create([
+                'user_id' => Auth::user()->id,
+                'mid' => $merchantId,
+                'orderId' => $orderId,
+                'sessionId' => $sessionId,
+                'orderstatus' => $orderStatus,
+                'pan' => $pan,
+                'exp' => $exp,
+                'amount' => $amount,
+                'payment_type' => $payment_type,
+            ]);
+
+            return response()->json(['message' => $payment, 201]);
+
+        } else {
+            return response()->json(['message' => 'Payment creation failed'], 400);
+        }
+    }
+
+    public function createOrder($merchantId, $amount, $pan, $exp, $payment_type)
+    {
+        $resp ='@fee:0@cur:USD@payout:{"payees":[{"mtxnid":"1688615455782386-1","mid":"122092016015926","amt":"0.50","ccy":"840"},{"mtxnid":"1688615455782386-2","mid":"122091511120425","amt":"0.50","ccy":"840"}]}@merchanttranid:16886119155@';
+        $dd = htmlspecialchars($resp);
+
+        $data='<?xml version="1.0" encoding="UTF-8"?>
+		<TKKPG>
+			<Request>
+				<Operation>CreateOrder</Operation>
+				<Language>EN</Language>
+				<Order>
+					<OrderType>Purchase</OrderType>
+					<Merchant>'.$merchantId.'</Merchant>
+					<Amount>'.$amount.'</Amount>
+					<Currency>840</Currency>
+					<Description>'.$dd.'</Description>
+					<SaveResponseDescription>true</SaveResponseDescription>
+				</Order>
+			</Request>
+		</TKKPG>';
+        if($payment_type=='txpg'){
+            $exec="http://10.6.2.25:8890/Exec";
+            $header_=['Content-Type: application/octet-stream', 'merchantCN: '.$merchantId];
+            $xmlResp = $this->executeXml($data,$exec,$header_);
+            var_dump($xmlResp);
+            $sessionId = (string) $xmlResp->Response->Order->SessionID;
+            $orderId = (string) $xmlResp->Response->Order->OrderID;
+            $xmlResp = $this->processFirst($sessionId, $merchantId, $orderId, $pan, $exp,$payment_type);
+            $xmlResp = $this->proccessAreq($merchantId, $orderId,$sessionId,$pan,$exp,$amount,$payment_type);
+
+            return ['OrderID' => $orderId, 'SessionID' => $sessionId];
+
+        }else{
+        $exec= "http://10.6.2.8:8068/exec";
+        $header_=['Content-Type: application/x-www-form-urlencoded', 'merchantCN: '.$merchantId];
+        $xmlResp = $this->executeXml($data,$exec,$header_);
+        $sessionId = (string) $xmlResp->Response->Order->SessionID;
+        $orderId = (string) $xmlResp->Response->Order->OrderID;
+        $xmlResp = $this->processFirst($sessionId, $merchantId, $orderId, $pan, $exp, $payment_type);
+        $xmlResp = $this->proccessAreq($merchantId, $orderId, $sessionId, $pan, $exp, $amount, $payment_type);
+
+        return ['OrderID' => $orderId, 'SessionID' => $sessionId];
+        }
+    }
+
+    /**Get Order Status */
+    public function getOrderStatus($sessionId, $merchantId, $orderId, $payment_type)
+    {
+        $data = '<?xml version="1.0" encoding="UTF-8"?>
+        <TKKPG>
+            <Request>
+                <Operation>GetOrderStatus</Operation>
+                <Language>EN</Language>
+                <Order>
+                    <Merchant>'.$merchantId.'</Merchant>
+                    <OrderID>'.$orderId.'</OrderID>
+                </Order>
+                <SessionID>'.$sessionId.'</SessionID>
+            </Request>
+        </TKKPG>';
+
+        // echo '<h1>Check Order Status</h1>';
+        // var_dump($data);
+        // echo '<h6>----------------------------------------------</h6>';
+
+        if($payment_type=='txpg'){
+            $exec="http://10.6.2.25:8890/Exec";
+            $header_=['Content-Type: application/octet-stream', 'merchantCN: '.$merchantId];
+            $xmlResp = $this->executeXml($data, $exec, $header_);
+            value($xmlResp);
+
+            return $xmlResp;
+
+        }else{
+            $exec= "http://10.6.2.8:8068/exec";
+            $header_=['Content-Type: application/x-www-form-urlencoded', 'merchantCN: '.$merchantId];
+            $xmlResp = $this->executeXml($data, $exec, $header_);
+
+            return $xmlResp;
+        }
     }
 
     // execute xml data and return respond for next process
@@ -114,8 +247,9 @@ class PaymentController extends Controller
 
         $paramCallBack = str_replace('/', '--', $paramCallBack);
 
-        $url = "http://10.6.2.8:8888/cardpayment_web/public/orders/".$paramCallBack;
         // $url = "http://localhost:8888/cardpayment_web/public/orders/".$paramCallBack;
+        // $url = "http://10.6.2.8:8888/cardpayment_web/public/orders/".$paramCallBack;
+        $url = "http://10.6.2.8:8888/cardpayment_web/public/payment-payout";
         $bankid=10065380;
         $start='*';
         $requestorID=($bankid.$start.$merchantId);
@@ -169,7 +303,7 @@ class PaymentController extends Controller
 
             $xmlResp= $this->setDataForm($paramCallBack, $acs, $creq);
 
-            return $xmlResp;
+            // return $xmlResp;
 
         }else{
         $exec= "http://10.6.2.8:8068/exec";
@@ -179,183 +313,50 @@ class PaymentController extends Controller
         $creq = (string) $xmlResp->Response->Refinement->CReq;
 
         $xmlResp= $this->setDataForm($paramCallBack,$acs,$creq);
-        return $xmlResp;
+        // dd($xmlResp);
+        // return $xmlResp;
 
         }
     }
 
     public function setDataForm( string $paramCallBack, string $acs, string $creq)
     {
-        var_dump($paramCallBack);
-           ?>
+        ?>
             <form name="areq_from"  action="<?= $acs; ?>" method="post" id="areq_from">
-            @csrf
+            @csrf <!-- {{ csrf_field() }} -->
                 CReq:<br> <textarea rows="9" cols="140" name="creq"><?= $creq; ?></textarea><br><br>
+                threeDSSessionData:<br> <textarea rows="9" cols="140" name="threeDSSessionData"><?= $paramCallBack; ?></textarea><br><br>
+
                 <input type="submit" value="Process CReq">
             </form>
 
             <script type="text/javascript">
-               document.getElementById('areq_from').submit(); // SUBMIT FORM
+                document.getElementById('areq_from').submit(); // SUBMIT FORM
             </script>
-            <?php
+        <?php
     }
 
-    public function createPayment(Request $request)
+    public function processoder(Request $request, PaymentDataTable $dataTable)
     {
         // dd($request->all());
-
-        // Validate the request data
-        $validatedData = $request->validate([
-            'amount' => 'required|numeric',
-            'card_number' => 'required|digits:16',
-            'exp_date' => 'required|digits:4'
-        ]);
-
-        // Call the CreateOrder function
-        $merchantId = '316100770110001';
-        $amount = $request->amount;
-        $pan= $request->card_number;
-        $exp= $request->exp_date;
-        $payment_type= $request->payment_type;
-
-        // $data = $merchantId.", ".$amount.", ".$pan.", ".$exp.", ".$payment_type;
-        // dd($data);
-
-        // echo $payment_type;
-        // echo $pan;
-        // echo $exp;
-
-        $xmlResp = $this->createOrder($merchantId, $amount, $pan, $exp, $payment_type);
-
-        $orderId = $xmlResp['OrderID'];
-        $sessionId = $xmlResp['SessionID'];
-        // $amount = $request->input('amount');
-        // $amount=str_replace(".", "", $amount);
-
-        // Process the response and return a JSON response
-        if ($xmlResp) {
-            // Process the XML response and extract the required data
-            // Add more data extraction as needed
-            $payment = Payment::create([
-                'mid' => $merchantId,
-                'orderId' => $orderId,
-                'sessionId' => $sessionId,
-                'pan' => $request->input('card_number'),
-                'exp' => $request->input('exp_date'),
-                'amount' => $amount,
-                'payment_type' => $payment_type,
-            ]);
-
-            return response()->json(['message' => $payment, 201]);
-
-        } else {
-            return response()->json(['message' => 'Payment creation failed'], 400);
-        }
-    }
-
-    public function createOrder($merchantId, $amount, $pan, $exp, $payment_type)
-    {
-        $resp ='@fee:0@cur:USD@payout:{"payees":[{"mtxnid":"1688615455782386-1","mid":"122092016015926","amt":"0.50","ccy":"840"},{"mtxnid":"1688615455782386-2","mid":"122091511120425","amt":"0.50","ccy":"840"}]}@merchanttranid:16886119155@';
-        $dd = htmlspecialchars($resp);
-
-        $data='<?xml version="1.0" encoding="UTF-8"?>
-		<TKKPG>
-			<Request>
-				<Operation>CreateOrder</Operation>
-				<Language>EN</Language>
-				<Order>
-					<OrderType>Purchase</OrderType>
-					<Merchant>'.$merchantId.'</Merchant>
-					<Amount>'.$amount.'</Amount>
-					<Currency>840</Currency>
-					<Description>'.$dd.'</Description>
-					<SaveResponseDescription>true</SaveResponseDescription>
-				</Order>
-			</Request>
-		</TKKPG>';
-        if($payment_type=='txpg'){
-            $exec="http://10.6.2.25:8890/Exec";
-            $header_=['Content-Type: application/octet-stream', 'merchantCN: '.$merchantId];
-            $xmlResp = $this->executeXml($data,$exec,$header_);
-            var_dump($xmlResp);
-            $sessionId = (string) $xmlResp->Response->Order->SessionID;
-            $orderId = (string) $xmlResp->Response->Order->OrderID;
-            $xmlResp = $this->processFirst($sessionId, $merchantId, $orderId, $pan, $exp,$payment_type);
-            $xmlResp = $this->proccessAreq($merchantId, $orderId,$sessionId,$pan,$exp,$amount,$payment_type);
-
-            return ['OrderID' => $orderId, 'SessionID' => $sessionId];
-
-        }else{
-        $exec= "http://10.6.2.8:8068/exec";
-        $header_=['Content-Type: application/x-www-form-urlencoded', 'merchantCN: '.$merchantId];
-        $xmlResp = $this->executeXml($data,$exec,$header_);
-        $sessionId = (string) $xmlResp->Response->Order->SessionID;
-        $orderId = (string) $xmlResp->Response->Order->OrderID;
-        $xmlResp = $this->processFirst($sessionId, $merchantId, $orderId, $pan, $exp,$payment_type);
-        $xmlResp = $this->proccessAreq($merchantId, $orderId,$sessionId,$pan,$exp,$amount,$payment_type);
-
-        return ['OrderID' => $orderId, 'SessionID' => $sessionId];
-        }
-    }
-
-    /**Get Order Status */
-    public function getOrderStatus($sessionId, $merchantId, $orderId, $payment_type)
-    {
-        $data = '<?xml version="1.0" encoding="UTF-8"?>
-        <TKKPG>
-            <Request>
-                <Operation>GetOrderStatus</Operation>
-                <Language>EN</Language>
-                <Order>
-                    <Merchant>316100770110001</Merchant>
-                    <OrderID>592671</OrderID>
-                </Order>
-                <SessionID>1CF68F6CDEBF19842A2F59C61EE79664</SessionID>
-            </Request>
-        </TKKPG>';
-
-        echo '<h1>Request Check3DS Auth</h1>';
-        var_dump($data);
-        echo '<h6>----------------------------------------------</h6>';
-        if($payment_type=='txpg'){
-            $exec="http://10.6.2.25:8890/Exec";
-            $header_=['Content-Type: application/octet-stream', 'merchantCN: '.$merchantId];
-            $xmlResp = $this->executeXml($data,$exec,$header_);
-
-            value($xmlResp);
-
-            return $xmlResp;
-
-        }else{
-            $exec= "http://10.6.2.8:8068/exec";
-            $header_=['Content-Type: application/x-www-form-urlencoded', 'merchantCN: '.$merchantId];
-            $xmlResp = $this->executeXml($data,$exec,$header_);
-
-            return $xmlResp;
-        }
-        //var_dump($xml);
-    }
-
-    public function processoder(Request $request, string $paramCallBack, PaymentDataTable $dataTable)
-    {
-        $data = base64_decode($paramCallBack);
+        // $data = base64_decode($paramCallBack);
+        $data = $request->threeDSSessionData;
+        $data = base64_decode($data);
         $data = json_decode($data, true);
-
-
-        // dd($request->all());
-        // var_dump($data['mid']);
         $cres=$request->cres;
-
-        // echo 'CRES'.$cres;
-        // dd($request->cres);
-        // dd($data);
         $cvv2=123;
 
         $proCre =$this->ProcessCres($data['mid'], $data['orderId'], $data['sessionId'], $cres, $data['pan'], $data['exp'], $cvv2, $data['payment_type']);
 
+        /**Check Order Status */
+        $xmlResp_getOrderStatus = $this->getOrderStatus($data['sessionId'], $data['mid'], $data['orderId'], $data['payment_type']);
+        $orderStatus = (string)$xmlResp_getOrderStatus->Response->Order->OrderStatus;
+        /**Update Order Status */
+        Payment::where('orderId', $data['orderId'])->where('sessionId', $data['sessionId'])->where('mid', $data['mid'])->update(['orderstatus' => $orderStatus]);
+
         // return view('frontend.page.paymentdata');
         toastr('Payment Successfully!','success');
-        return redirect()->route('home');
+        return redirect()->route('user.home');
     }
 
     public function ProcessCres($merchantId, $orderId, $sessionId, $cres, $pan, $exp, $cvv2,$payment_type)
@@ -378,9 +379,6 @@ class PaymentController extends Controller
                 <CVV2>'.$cvv2.'</CVV2>
             </Request>
         </TKKPG>';
-        // echo '<h1>Request CRes</h1>';
-        // var_dump($data);
-        // echo '<h6>----------------------------------------------</h6>';
 
         if($payment_type=='txpg'){
             $exec="http://10.6.2.25:8890/Exec";
@@ -395,6 +393,7 @@ class PaymentController extends Controller
             $header_=['Content-Type: application/x-www-form-urlencoded', 'merchantCN: '.$merchantId];
             $xmlResp = $this->executeXml($data, $exec, $header_);
 
+            var_dump($xmlResp);
             return $xmlResp;
 
         }
