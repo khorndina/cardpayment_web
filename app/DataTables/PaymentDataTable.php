@@ -23,12 +23,22 @@ class PaymentDataTable extends DataTable
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
         return (new EloquentDataTable($query))
-            ->addColumn('action', function($query){
-                $btnComplete = "<a href='".route('vendor.products.edit', $query->id)."' class='btn btn-primary ml-2'> Complete </a>";
-                $btnRefund = "<a href='".route('vendor.products.destroy', $query->id)."' class='btn btn-danger ml-2 delete-item'> Refund </a>";
-                $btnReverse = "<a href='".route('vendor.products.destroy', $query->id)."' class='btn btn-warning ml-2 delete-item'> Reverse </a>";
+            ->addColumn('action', function($query) {
+                $btnComplete = "<a href='#' class='btn btn-primary' style='margin-right: 2px;'>Complete</a>";
 
-                return $btnComplete.$btnRefund.$btnReverse;
+                $btnRefund = '<form method="POST" action="'.route('user.payment.refund', ['orderId'=>$query->orderId, 'merchantId'=>$query->mid, 'sessionId'=>$query->sessionId, 'amount'=>$query->amount, 'payment_type'=>$query->payment_type]).'">
+                                <input type="hidden" name="_token" value="'.csrf_token().'">
+                                <input type="hidden" name="_method" value="POST">
+                                <button type="submit" class="btn btn-danger">Refund</button>
+                            </form>';
+
+                $btnReverse = '<form method="POST" action="'.route('user.payment.reversal', ['orderId'=>$query->orderId, 'merchantId'=>$query->mid, 'sessionId'=>$query->sessionId, 'payment_type'=>$query->payment_type]).'">
+                                <input type="hidden" name="_token" value="'.csrf_token().'">
+                                <input type="hidden" name="_method" value="POST">
+                                <button type="submit" class="btn btn-warning" style="margin-left: 2px;">Reversal</button>
+                            </form>';
+
+                return "<div class='d-flex'>".$btnComplete.$btnRefund.$btnReverse."</div>";
             })
             ->addColumn('pan', function($query){
                 $masked_pan = substr($query->pan, 0, 6) . str_repeat('*', 6) . substr($query->pan, -4);
@@ -37,6 +47,7 @@ class PaymentDataTable extends DataTable
             ->addColumn('order_date', function($query){
                 return $query->created_at->format('d-m-Y');
             })
+            // ->rawColumns(['action'])
             ->setRowId('id');
     }
 
@@ -82,12 +93,12 @@ class PaymentDataTable extends DataTable
             Column::make('pan'),
             Column::make('amount'),
             Column::make('orderstatus'),
-            // Column::make('payment_type'),
-            Column::make('order_date'),
+            Column::make('payment_type'),
+            // Column::make('order_date'),
             Column::computed('action')
                   ->exportable(false)
                   ->printable(false)
-                  ->width(300)
+                  ->width(150)
                   ->addClass('text-center'),
         ];
     }

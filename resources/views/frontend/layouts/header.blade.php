@@ -8,7 +8,7 @@
             </div>
             <div class="col-xl-2 col-7 col-md-8 col-lg-2">
                 <div class="wsus_logo_area">
-                    <a class="wsus__header_logo" href="index.html">
+                    <a class="wsus__header_logo" href="#">
                         <img width="30%" src="{{ asset('frontend/images/ABA logo.png') }}" alt="logo" class="img-fluid w-10">
                     </a>
                 </div>

@@ -4,10 +4,14 @@ namespace App\Http\Controllers\backend;
 
 use App\DataTables\PaymentDataTable;
 use App\Http\Controllers\Controller;
+use App\Models\FlashSale;
+use App\Models\FlashSaleItem;
 use App\Models\Payment;
+use App\Models\Slider;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
+use Yoeunes\Toastr\Facades\Toastr;
 
 class PaymentController extends Controller
 {
@@ -18,6 +22,17 @@ class PaymentController extends Controller
         }
 
         return view('frontend.page.payment');
+    }
+
+    public function userHomePage(){
+        $sliders = Slider::where('status', 1)->orderBy('serail','asc')->get();
+        // dd($sliders);
+        $flashSale = FlashSale::first();
+        // // dd($flashSale);
+        $flashsaleItems = FlashSaleItem::where('show_at_home', 1)->where('status', 1)->get();
+        // // dd($flashsaleItem);
+
+        return view('frontend.Home.home', compact('sliders', 'flashSale', 'flashsaleItems'));
     }
 
     public function createPayment(Request $request)
@@ -355,7 +370,7 @@ class PaymentController extends Controller
         Payment::where('orderId', $data['orderId'])->where('sessionId', $data['sessionId'])->where('mid', $data['mid'])->update(['orderstatus' => $orderStatus]);
 
         // return view('frontend.page.paymentdata');
-        toastr('Payment Successfully!','success');
+        Toastr('Payment Successfully!','success');
         return redirect()->route('user.home');
     }
 
@@ -396,6 +411,131 @@ class PaymentController extends Controller
             var_dump($xmlResp);
             return $xmlResp;
 
+        }
+    }
+
+    public function refundPayment($orderId, $merchantId, $sessionId, $amount, $payment_type)
+    {
+        // dd(request()->all());
+
+        $amount=intval($amount);
+        // echo 'Refund Amount:'. $amount;
+        $currency=840;
+        $data = "<?xml version='1.0' encoding='UTF-8'?>
+                <TKKPG>
+                    <Request>
+                        <Operation>Refund</Operation>
+                        <Language>EN</Language>
+                        <Order>
+                            <Merchant>".$merchantId."</Merchant>
+                            <OrderID>".$orderId."</OrderID>
+                        </Order>
+                        <SessionID>".$sessionId."</SessionID>
+                        <Refund>
+                            <Amount>".$amount."</Amount>
+                            <Currency>".$currency."</Currency>
+                        </Refund>
+                    </Request>
+                </TKKPG>";
+        $respStatus = null;
+
+        if($payment_type=='TXPG'){
+            $exec="http://10.6.2.25:8890/Exec";
+            $header_=['Content-Type: application/octet-stream', 'merchantCN: '.$merchantId];
+            $xmlResp = $this->executeXml($data,$exec,$header_);
+            $respStatus = (string)$xmlResp->Response->Status;
+            // return response()->json(['message' => 'Payment refunded successfully']);
+
+            /**Check Order Status */
+            $getOrderStatus = $this->getOrderStatus($sessionId, $merchantId, $orderId, $payment_type);
+            $orderStatus = (string)$getOrderStatus->Response->Order->OrderStatus;
+
+            /**Update Order Status */
+            Payment::where('orderId', $orderId)->where('sessionId', $sessionId)->where('mid', $merchantId)->update(['orderstatus' => $orderStatus]);
+
+        }else{
+
+            $exec= "http://10.6.2.8:8068/exec";
+            $header_=['Content-Type: application/x-www-form-urlencoded', 'merchantCN: '.$merchantId];
+            $xmlResp = $this->executeXml($data, $exec, $header_);
+            $respStatus = (string)$xmlResp->Response->Status;
+            // return response()->json(['message' => 'Payment refunded successfully']);
+
+            /**Check Order Status */
+            $getOrderStatus = $this->getOrderStatus($sessionId, $merchantId, $orderId, $payment_type);
+            $orderStatus = (string)$getOrderStatus->Response->Order->OrderStatus;
+
+            /**Update Order Status */
+            Payment::where('orderId', $orderId)->where('sessionId', $sessionId)->where('mid', $merchantId)->update(['orderstatus' => $orderStatus]);
+        }
+
+        if($respStatus === '00'){
+            Toastr('Refund Successfully!','success');
+            return redirect()->route('user.transaction-management');
+        }else{
+            Toastr('Something went wrong, Response Status '.$respStatus,'error');
+            return redirect()->route('user.transaction-management');
+        }
+
+    }
+
+    public function reservePayment($orderId, $merchantId, $sessionId, $payment_type)
+    {
+
+        // dd(request()->all());
+
+        $description='Reverse TXPG';
+        $data = '<?xml version="1.0" encoding="UTF-8"?>
+            <TKKPG>
+                <Request>
+                    <Operation>Reverse</Operation>
+                    <Language>EN</Language>
+                    <Order>
+                        <Merchant>'.$merchantId.'</Merchant>
+                        <OrderID>'.$orderId.'</OrderID>
+                    </Order>
+                    <Description>'.$description.'</Description>
+                    <SessionID>'.$sessionId.'</SessionID>
+                </Request>
+            </TKKPG> ';
+
+        if($payment_type=='TXPG'){
+            $exec="http://10.6.2.25:8890/Exec";
+            $header_=['Content-Type: application/octet-stream', 'merchantCN: '.$merchantId];
+            $xmlResp = $this->executeXml($data,$exec,$header_);
+
+            $respStatus = (string)$xmlResp->Response->Status;
+
+            /**Check Order Status */
+            $getOrderStatus = $this->getOrderStatus($sessionId, $merchantId, $orderId, $payment_type);
+            $orderStatus = (string)$getOrderStatus->Response->Order->OrderStatus;
+
+            /**Update Order Status */
+            Payment::where('orderId', $orderId)->where('sessionId', $sessionId)->where('mid', $merchantId)->update(['orderstatus' => $orderStatus]);
+
+        }else{
+
+            $exec= "http://10.6.2.8:8068/exec";
+            $header_=['Content-Type: application/x-www-form-urlencoded', 'merchantCN: '.$merchantId];
+            $xmlResp = $this->executeXml($data,$exec,$header_);
+
+            $respStatus = (string)$xmlResp->Response->Status;
+
+            /**Check Order Status */
+            $getOrderStatus = $this->getOrderStatus($sessionId, $merchantId, $orderId, $payment_type);
+            $orderStatus = (string)$getOrderStatus->Response->Order->OrderStatus;
+
+            /**Update Order Status */
+            Payment::where('orderId', $orderId)->where('sessionId', $sessionId)->where('mid', $merchantId)->update(['orderstatus' => $orderStatus]);
+
+        }
+
+        if($respStatus === '00'){
+            Toastr('Refund Successfully!','success');
+            return redirect()->back();
+        }else{
+            Toastr('Something went wrong, Response Status '.$respStatus,'error');
+            return redirect()->back();
         }
     }
 }

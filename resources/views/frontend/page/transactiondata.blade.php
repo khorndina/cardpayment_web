@@ -1,11 +1,11 @@
-@extends('vendor.layouts.master')
+@extends('frontend.dashboard.layouts.master')
 
 @section('content')
     <section id="wsus__dashboard">
     <div>
         {{-- class="container-fluid" --}}
 
-        @include('vendor.layouts.sidebar')
+        @include('frontend.dashboard.layouts.sidebar')
 
         <div class="row">
             <div class="col-xl-9 col-xxl-10 col-lg-9 ms-auto">
@@ -30,28 +30,12 @@
   {{ $dataTable->scripts(attributes: ['type' => 'module']) }}
 
   {{-- <script>
-    $(document).ready(function(){
-        $('body').on('click', '.change-status', function(){
-        // alert('helelll');
-		let ischecked = $(this).is(':checked');
-		let id = $(this).data('id');
-        // console.log(id); /**show on console when inspec*/
-        $.ajax({
-                url: "{{route('vendor.products.changestatus')}}",
-                method: 'PUT',
-                data:{
-                    ischecked:ischecked,
-                    id:id
-                },
-                success: function(data){
-                    // console.log(data);
-                    toastr.success(data.message);
-                },
-                error:function(xhr, status, error){
-                    console.log(error);
-                }
-            })
-	    })
-    })
+    $(document).on('click', 'form button[type="submit"]', function(e) {
+        e.preventDefault();
+        var form = $(this).closest('form');
+        var method = form.find('input[name="_method"]').val();
+        form.attr('method', method).submit();
+    });
   </script> --}}
+
 @endpush

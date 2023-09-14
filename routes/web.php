@@ -110,6 +110,11 @@ Route::group(['middleware' => ['auth', 'verified'], 'prefix' => 'user', 'as' => 
     // Payment Routes
     Route::get('payment', [PaymentController::class, 'index'])->name('payment');
     Route::post('payment/create', [PaymentController::class, 'createPayment'])->name('payment.create');
+    Route::post('payment/refund/{orderId}/{merchantId}/{sessionId}/{amount}/{payment_type}', [PaymentController::class, 'refundPayment'])->name('payment.refund');
+    Route::post('payment/reserve/{orderId}/{merchantId}/{sessionId}/{payment_type}', [PaymentController::class, 'reservePayment'])->name('payment.reversal');
+
+    /**User Home Page */
+    Route::get('home',[PaymentController::class, 'userHomePage'])->name('home');
 
     /**Routes to ACS PAGE and Return Paramater back */
     // Route::post('orders/{paramCallBack}', [PaymentController::class, 'processoder']);
@@ -117,7 +122,4 @@ Route::group(['middleware' => ['auth', 'verified'], 'prefix' => 'user', 'as' => 
 
     // Transaction Management Routes
     Route::get('transaction-management', [TransactionManagementController::class, 'index'])->name('transaction-management');
-
-    /**User Home Page */
-    Route::get('home',[HomeController::class, 'index'])->name('home');
 });
