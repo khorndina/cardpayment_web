@@ -1,6 +1,6 @@
 <section id="wsus__flash_sell" class="wsus__flash_sell_2">
     <div class=" container">
-        <div class="row">
+        <!-- <div class="row">
             <div class="col-xl-12">
                 <div class="offer_time" style="background: url({{asset('frontend/images/flash_sell_bg.jpg')}})">
                     <div class="wsus__flash_coundown">
@@ -10,7 +10,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> -->
         <div class="row flash_sell_slider">
             @foreach ($flashsaleItems as $flashsaleItem)
             @php
@@ -58,8 +58,18 @@
                                             @endforeach
                                         </select>
                                     @endforeach
-                                    <input type="hidden" name="qty" min="1" max="100" value="1">
+                                    <!-- <input type="hidden" name="qty" min="1" max="100" value="1">
                                     <button type="submit" class="add_cart" href="#">add to cart</button>
+                                    <li><a class="buy_now" href="{{ route('user.checkout') }}">buy now</a></li> -->
+                                    <input type="hidden" name="qty" min="1" max="100" value="1">
+                                    <ul class="wsus__button_area">
+                                        
+                                            <li><button type="submit" class="add_cart" href="#">add to cart</li>
+                                            <li><a class="buy_now" href="{{ route('user.checkout') }}">buy now</a></li>
+                                            <!-- <li><a href="#"><i class="fal fa-heart "></i></a>add to cart</li> -->
+                                            <!-- <li><a href="#"><i class="far fa-random"></i></a></li> -->
+                                        </ul>
+                                    
                             </form>
                         </div>
                     </div>

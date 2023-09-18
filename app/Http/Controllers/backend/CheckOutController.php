@@ -51,21 +51,21 @@ class CheckOutController extends Controller
         // dd($request->all());
         $request->validate([
             'shipping_method_id' => 'required|integer',
-            'shipping_address_id' => 'required|integer'
+            // 'shipping_address_id' => 'required|integer'
         ]);
 
-        $shippingMethod = ShippingRule::findOrFail($request->shipping_method_id);
+        // $shippingMethod = ShippingRule::findOrFail($request->shipping_method_id);
         // dd($shippingMethod);
-        Session::put('shipping_method', [
-            'id' => $shippingMethod->id,
-            'name' => $shippingMethod->name,
-            'type' => $shippingMethod->type,
-            'cost' => $shippingMethod->cost,
-        ]);
+        // Session::put('shipping_method', [
+        //     'id' => $shippingMethod->id,
+        //     'name' => $shippingMethod->name,
+        //     'type' => $shippingMethod->type,
+        //     'cost' => $shippingMethod->cost,
+        // ]);
 
-        $address = UserAddress::findOrFail($request->shipping_address_id)->toArray();
+        // $address = UserAddress::findOrFail($request->shipping_address_id)->toArray();
         // dd($address);
-        Session::put('address', $address);
+        // Session::put('address', $address);
 
         return response(['status' => 'success', 'redirect_url' => route('user.payment')]);
     }

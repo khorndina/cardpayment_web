@@ -10,7 +10,7 @@
     <!--============================
         BANNER PART 2 START
     ==============================-->
-    @include('frontend.Home.section.banner-slider')
+    <!-- @include('frontend.Home.section.banner-slider') -->
     <!--============================
         BANNER PART 2 END
     ==============================-->

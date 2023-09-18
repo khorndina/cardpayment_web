@@ -1,5 +1,5 @@
 <footer class="footer_2">
-    <div class="container">
+    <!-- <div class="container">
         <div class="row justify-content-between">
             <div class="col-xl-3 col-sm-7 col-md-6 col-lg-3">
                 <div class="wsus__footer_content">
@@ -64,7 +64,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> -->
     <div class="wsus__footer_bottom">
         <div class="container">
             <div class="row">

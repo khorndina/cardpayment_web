@@ -44,101 +44,51 @@
 
                     <ul class="wsus__menu_item">
                         <li><a class="active" href="{{ route('home') }}">home</a></li>
-                        {{-- <li><a href="product_grid_view.html">shop <i class="fas fa-caret-down"></i></a>
-                            <div class="wsus__mega_menu">
-                                <div class="row">
-                                    <div class="col-xl-3 col-lg-3">
-                                        <div class="wsus__mega_menu_colum">
-                                            <h4>women</h4>
-                                            <ul class="wsis__mega_menu_item">
-                                                <li><a href="#">New Arrivals</a></li>
-                                                <li><a href="#">Best Sellers</a></li>
-                                                <li><a href="#">Trending</a></li>
-                                                <li><a href="#">Clothing</a></li>
-                                                <li><a href="#">Shoes</a></li>
-                                                <li><a href="#">Bags</a></li>
-                                                <li><a href="#">Accessories</a></li>
-                                                <li><a href="#">Jewlery & Watches</a></li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                    <div class="col-xl-3 col-lg-3">
-                                        <div class="wsus__mega_menu_colum">
-                                            <h4>men</h4>
-                                            <ul class="wsis__mega_menu_item">
-                                                <li><a href="#">New Arrivals</a></li>
-                                                <li><a href="#">Best Sellers</a></li>
-                                                <li><a href="#">Trending</a></li>
-                                                <li><a href="#">Clothing</a></li>
-                                                <li><a href="#">Shoes</a></li>
-                                                <li><a href="#">Bags</a></li>
-                                                <li><a href="#">Accessories</a></li>
-                                                <li><a href="#">Jewlery & Watches</a></li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                    <div class="col-xl-3 col-lg-3">
-                                        <div class="wsus__mega_menu_colum">
-                                            <h4>category</h4>
-                                            <ul class="wsis__mega_menu_item">
-                                                <li><a href="#"> Healthy & Beauty</a></li>
-                                                <li><a href="#">Gift Ideas</a></li>
-                                                <li><a href="#">Toy & Games</a></li>
-                                                <li><a href="#">Cooking</a></li>
-                                                <li><a href="#">Smart Phones</a></li>
-                                                <li><a href="#">Cameras & Photo</a></li>
-                                                <li><a href="#">Accessories</a></li>
-                                                <li><a href="#">View All Categories</a></li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                    <div class="col-xl-3 col-lg-3">
-                                        <div class="wsus__mega_menu_colum">
-                                            <h4>women</h4>
-                                            <ul class="wsis__mega_menu_item">
-                                                <li><a href="#">New Arrivals</a></li>
-                                                <li><a href="#">Best Sellers</a></li>
-                                                <li><a href="#">Trending</a></li>
-                                                <li><a href="#">Clothing</a></li>
-                                                <li><a href="#">Shoes</a></li>
-                                                <li><a href="#">Bags</a></li>
-                                                <li><a href="#">Accessories</a></li>
-                                                <li><a href="#">Jewlery & Watches</a></li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
-                        <li><a href="vendor.html">vendor</a></li>
-                        <li><a href="blog.html">blog</a></li>
-                        <li><a href="daily_deals.html">campain</a></li>
-                        <li class="wsus__relative_li"><a href="#">pages <i class="fas fa-caret-down"></i></a>
-                            <ul class="wsus__menu_droapdown">
-                                <li><a href="404.html">404</a></li>
-                                <li><a href="faqs.html">faq</a></li>
-                                <li><a href="invoice.html">invoice</a></li>
-                                <li><a href="about_us.html">about</a></li>
-                                <li><a href="product_grid_view.html">product</a></li>
-                                <li><a href="check_out.html">check out</a></li>
-                                <li><a href="team.html">team</a></li>
-                                <li><a href="change_password.html">change password</a></li>
-                                <li><a href="custom_page.html">custom page</a></li>
-                                <li><a href="forget_password.html">forget password</a></li>
-                                <li><a href="privacy_policy.html">privacy policy</a></li>
-                                <li><a href="product_category.html">product category</a></li>
-                                <li><a href="brands.html">brands</a></li>
-                            </ul>
-                        </li> --}}
+                        
                         <li><a href="{{ route('user.transaction-management') }}">Transaction Management</a></li>
-                        {{-- <li><a href="daily_deals.html">daily deals</a></li> --}}
+                        
                     </ul>
                     <ul class="wsus__menu_item wsus__menu_item_right">
-                        {{-- <li><a href="contact.html">contact</a></li>
-                        <li><a href="dsahboard.html">my account</a></li> --}}
+                        <li><a href="dsahboard.html">my account</a></li> 
                         <li><a href="{{ route('login') }}">login</a></li>
+                        
+                    </ul>
+                    <ul class="wsus__icon_area">
+                        <li><a class="wsus__cart_icon" href="#">
+                            <i class="fal fa-shopping-bag"></i><span id="cart_count">{{Cart::content()->count()}}</span></a>
+                        </li>
                     </ul>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="wsus__mini_cart">
+        <h4>shopping cart <span class="wsus_close_mini_cart"><i class="far fa-times"></i></span></h4>
+        <ul class="mini_cart_wrapper">
+            @foreach (Cart::content() as $sidebarCartProduct)
+                <li id="mini_cart_{{$sidebarCartProduct->rowId}}">
+                    <div class="wsus__cart_img">
+                        <a href="#"><img src="{{ asset($sidebarCartProduct->options->image) }}" alt="product" class="img-fluid w-100"></a>
+                        <a class="wsis__del_icon remove_cart_product" data-row-id="{{$sidebarCartProduct->rowId}}" href="#"><i class="fas fa-minus-circle"></i></a>
+                    </div>
+                    <div class="wsus__cart_text">
+                        <a class="wsus__cart_title" href="{{ route('product-detail.showProduct', $sidebarCartProduct->options->slug) }}">{{$sidebarCartProduct->name}}</a>
+                        <p>{{$generalSetting->currency_icon}} {{$sidebarCartProduct->price}}</p>
+                        <small>Variant Total: {{$generalSetting->currency_icon}} {{$sidebarCartProduct->options->variants_total}}</small><br>
+                        <small>Qty: {{$sidebarCartProduct->qty}}</small>
+                    </div>
+                </li>
+            @endforeach
+            @if(Cart::content()->count() === 0)
+                <li class="text-center"> Cart is empyt!</li>
+            @endif
+        </ul>
+        <div class="mini_cart_actions {{Cart::content()->count() === 0 ? 'd-none' : ''}}">
+            <h5>sub total <span id="mini_cart_subtotal">{{$generalSetting->currency_icon}}{{getCartTotal()}}</span></h5>
+            <div class="wsus__minicart_btn_area">
+                <a class="common_btn" href="{{ route('cart-details') }}">view cart</a>
+                <a class="common_btn" href="{{ route('user.checkout') }}">checkout</a>
             </div>
         </div>
     </div>

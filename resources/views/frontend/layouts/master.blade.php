@@ -39,7 +39,7 @@
     <!--============================
         HEADER START
     ==============================-->
-    @include('frontend.layouts.header')
+    <!-- @include('frontend.layouts.header') -->
     <!--============================
         HEADER END
     ==============================-->

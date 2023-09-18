@@ -27,10 +27,161 @@
     <!--============================
         CHECK OUT PAGE START
     ==============================-->
+    <?php
+        $digits = 5;
+        $randomNum = substr(str_shuffle("012"), 0, $digits);
+        //echo $randomNum;
+        $referebce_number='0'.time().($randomNum);
+        
+        ?>
     <section id="wsus__cart_view">
         <div class="container">
-                <div class="row">
-                    <div class="col-xl-8 col-lg-7">
+            
+
+          <div class="row">
+                    <!-- Add Customer Billing -->
+            <div class="col-xl-8 col-lg-7">
+                <div class="wsus__check_form">
+                    <!-- <h5>Billing Details <a href="#" data-bs-toggle="modal" data-bs-target="#exampleModal">add
+                            new address</a></h5> -->
+
+                    <h5>Checkout Form <a href="#" data-bs-toggle="modal" data-bs-target="#exampleModal" style="margin-left: 480px;" ></a></h5>
+
+                    <h4 class="box-title"><b>Payment Summary</b></h4>
+	
+				<table class="table table-condensed">
+					<tbody>
+						<tr>
+							<td>Previous Transaction ID</td>
+							<td style="text-align: right; padding-right: 30px">
+							<?php echo $referebce_number ;?>
+							|
+							<?php echo $referebce_number ;?>
+							</td>
+						</tr>
+						<tr>
+							<td>Transaction ID</td>
+							<td style="text-align: right; padding-right: 30px"><?php echo $referebce_number ;?></td>
+						</tr>
+						<tr>
+							<th>SubTotal</th>
+							<th style="text-align: right; padding-right: 30px">{{$generalSetting->currency_icon}}{{getMainCartTotal()}}</th>
+						</tr>
+						<tr>
+							<th>Total</th>
+							<th style="text-align: right; padding-right: 30px"><span style="font-size: 25px;">{{$generalSetting->currency_icon}}{{getMainCartTotal()}}</span>
+							
+							</th>
+							<input type="hidden" name="total-amount" value="0.10">
+						</tr>
+					</tbody>
+				</table>
+                
+                <h5>Billing Information <a href="#" data-bs-toggle="modal" data-bs-target="#exampleModal" style="margin-left: 480px;" ></a></h5>
+                    <div class="row">
+                        @foreach ($userAddresses as $userAddress)
+                        <div class="col-md-6 col-lg-12 col-xl-6">
+                            <div class="wsus__check_single_form">
+                                <input type="text" placeholder="First Name" value="{{$userAddress->name}}">
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-lg-12 col-xl-6">
+                            <div class="wsus__check_single_form">
+                                <input type="text" placeholder="Last Name">
+                            </div>
+                        </div>
+                        <div class="col-md-12 col-lg-12 col-xl-12">
+                            <div class="wsus__check_single_form">
+                                <input type="text" placeholder="Company Name (Optional)">
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-lg-12 col-xl-6">
+                            <div class="wsus__check_single_form">
+                                <select class="select_2" name="state">
+                                    <option value="AL">Country / Region *</option>
+                                    <option value="">dhaka</option>
+                                    <option value="">barisal</option>
+                                    <option value="">khulna</option>
+                                    <option value="">rajshahi</option>
+                                    <option value="">bogura</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-lg-12 col-xl-6">
+                            <div class="wsus__check_single_form">
+                                <input type="text" placeholder="Street Address *">
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-lg-12 col-xl-6">
+                            <div class="wsus__check_single_form">
+                                <input type="text" placeholder="Apartment, suite, unit, etc. (optional)">
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-lg-12 col-xl-6">
+                            <div class="wsus__check_single_form">
+                                <input type="text" value="{{$userAddress->city}}" placeholder="Town / City *">
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-lg-12 col-xl-6">
+                            <div class="wsus__check_single_form">
+                                <input type="text" value="{{$userAddress->address}}" placeholder="State *">
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-lg-12 col-xl-6">
+                            <div class="wsus__check_single_form">
+                                <input type="text" placeholder="Zip *">
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-lg-12 col-xl-6">
+                            <div class="wsus__check_single_form">
+                                <input type="text" value="{{$userAddress->phone}}" placeholder="Phone *">
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-lg-12 col-xl-6">
+                            <div class="wsus__check_single_form">
+                                <input type="email" value="{{$userAddress->email}}" placeholder="Email *">
+                            </div>
+                        </div>
+                       
+                        <div class="col-md-12 col-lg-12 col-xl-12">
+                            <div class="accordion checkout_accordian" id="accordionExample">
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header" id="headingThree">
+                                        <button class="accordion-button collapsed" type="button"
+                                            data-bs-toggle="collapse" data-bs-target="#collapseThree"
+                                            aria-expanded="false" aria-controls="collapseThree">
+                                            <div class="wsus__check_single_form">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" value=""
+                                                        id="flexCheckDefault">
+                                                    <label class="form-check-label" for="flexCheckDefault">
+                                                        Same as shipping address
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </button>
+                                    </h2>
+                                    
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-12 col-lg-12 col-xl-12">
+                            <div class="wsus__check_single_form">
+                                <h5>Additional Information</h5>
+                                <textarea cols="3" rows="4"
+                                    placeholder="Notes about your order, e.g. special notes for delivery"></textarea>
+                            </div>
+                        </div>
+                        @endforeach
+                    </div>
+
+                    
+                
+                </div>
+            </div>
+           <!-- End Add Customer Billing -->
+                    <!-- <div class="col-xl-8 col-lg-7">
                         <div class="wsus__check_form">
                             <h5>Billing Details <a href="#" data-bs-toggle="modal" data-bs-target="#exampleModal" style="margin-left: 480px;" >add new address</a></h5>
                             <div class="row">
@@ -55,10 +206,11 @@
                                 @endforeach
                             </div>
                         </div>
-                    </div>
+                    </div> -->
+
                     <div class="col-xl-4 col-lg-5">
                         <div class="wsus__order_details" id="sticky_sidebar">
-                            <p class="wsus__product">shipping Methods</p>
+                            <p class="wsus__product">Summary Methods</p>
                             @foreach ($shippingMethods as $shippingMethod)
                                 @if($shippingMethod->type === 'min_cost' && getCartTotal() >= $shippingMethod->min_cost)
                                     <div class="form-check">
@@ -79,12 +231,12 @@
                                 @endif
                             @endforeach
 
-                            <div class="wsus__order_details_summery">
+                            <!-- <div class="wsus__order_details_summery">
                                 <p>subtotal: <span>{{$generalSetting->currency_icon}}{{getCartTotal()}}</span></p>
                                 <p>shipping fee: <span id="shipping_fee">{{$generalSetting->currency_icon}}0</span></p>
                                 <p>Coupon: <span></span>{{$generalSetting->currency_icon}}{{getCartDiscount()}}</p>
                                 <p><b>total:</b> <span id="total_fee" data-id="{{getMainCartTotal()}}"><b>{{$generalSetting->currency_icon}}{{getMainCartTotal()}}</b></span></p>
-                            </div>
+                            </div> -->
 
                             <!-- Payment Method -->
                             <div class="wsus__payment_method">
@@ -234,9 +386,12 @@
                 // alert('hi');
                 if ($('#shipping_method_id').val() == "") {
                     toastr.error("Shipping Method Is Requered")
-                } else if($('#shipping_address_id').val() == "") {
-                    toastr.error("Shipping Address Is Requered")
-                }else if(!$('.agree_term').prop('checked')){
+                } 
+                // else if($('#shipping_address_id').val() == "") {
+                //     toastr.error("Shipping Address Is Requered")
+                // }
+                
+                else if(!$('.agree_term').prop('checked')){
                     toastr.error("You have read and agree to the website Term and Agreement!")
                 }else{
                     $.ajax({
