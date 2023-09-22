@@ -6,11 +6,11 @@
                     {{-- <a class="wsus__footer_2_logo" href="#">
                         <img src="images/logo_2.png" alt="logo">
                     </a> --}}
-                    <a class="action" href="callto:+8896254857456"><i class="fas fa-phone-alt"></i>
-                        +8896254857456</a>
+                    <a class="action" href="callto:+855 98 00 000 000"><i class="fas fa-phone-alt"></i>
+                        +855 98 00 000 000</a>
                     <a class="action" href="mailto:example@gmail.com"><i class="far fa-envelope"></i>
-                        example@gmail.com</a>
-                    <p><i class="fal fa-map-marker-alt"></i> San Francisco City Hall, San Francisco, CA</p>
+                        Cardsystem@ababank.com</a>
+                    <p><i class="fal fa-map-marker-alt"></i> 148 Preah Sihanouk Blvd, Sangkat Boeung Keng Kang I, Khan Boeung Keng Kang, Phnom Penh, Cambodia</p>
                     <ul class="wsus__footer_social">
                         <li><a class="facebook" href="#"><i class="fab fa-facebook-f"></i></a></li>
                         <li><a class="twitter" href="#"><i class="fab fa-twitter"></i></a></li>
@@ -70,7 +70,7 @@
             <div class="row">
                 <div class="col-xl-12">
                     <div class="wsus__copyright d-flex justify-content-center">
-                        <p>Copyright © 2021 Sazao shop. All Rights Reserved.</p>
+                        <p>Copyright © 2023 Card System. All Rights Reserved.</p>
                     </div>
                 </div>
             </div>

@@ -8,7 +8,7 @@
             </div>
             <div class="col-xl-2 col-7 col-md-8 col-lg-2">
                 <div class="wsus_logo_area">
-                    <a class="wsus__header_logo" href="index.html">
+                    <a class="wsus__header_logo" href="#">
                         <img width="30%" src="{{ asset('frontend/images/ABA logo.png') }}" alt="logo" class="img-fluid w-10">
                     </a>
                 </div>
@@ -28,8 +28,8 @@
                             <i class="fas fa-user-headset"></i>
                         </div>
                         <div class="wsus__call_text">
-                            <p>cardsystem@gmail.com</p>
-                            <p>+569875544220</p>
+                            <p>cardsystem@ababank.com</p>
+                            <p>+855 98 00 000 000</p>
                         </div>
                     </div>
                     <ul class="wsus__icon_area">

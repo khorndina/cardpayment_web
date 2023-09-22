@@ -67,6 +67,6 @@ class CheckOutController extends Controller
         // dd($address);
         Session::put('address', $address);
 
-        return response(['status' => 'success', 'redirect_url' => route('user.Payment')]);
+        return response(['status' => 'success', 'redirect_url' => route('user.payment')]);
     }
 }

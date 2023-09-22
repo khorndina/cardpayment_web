@@ -26,12 +26,17 @@
     <link rel="stylesheet" href="{{ asset('frontend/css/jquery.classycountdown.css') }}">
     <link rel="stylesheet" href="{{ asset('frontend/css/venobox.min.css') }}">
 
+    {{-- yajra datatables --}}
+    <link rel="stylesheet" href="//cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+    {{-- <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css"> --}}
+
     {{-- toastr allert --}}
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
 
     <link rel="stylesheet" href="{{ asset('frontend/css/style.css') }}">
     <link rel="stylesheet" href="{{ asset('frontend/css/responsive.css') }}">
     <!-- <link rel="stylesheet" href="css/rtl.css"> -->
+
 </head>
 
 <body>
@@ -47,28 +52,54 @@
     </div>
     </div> --}}
 
+    {{-- <div class="wsus__dashboard_menu">
+        <div class="wsusd__dashboard_user">
+            <li class="dropdown"><a href="#" data-toggle="dropdown" class="nav-link dropdown-toggle nav-link-lg nav-link-user">
+                <img alt="image" src="{{ asset('frontend/images/avtar.jpg') }}" class="rounded-circle mr-1">
+                <div class="d-sm-none d-lg-inline-block">Hi, {{Auth::user()->name}}</div></a>
+                <div class="dropdown-menu ">
+                    <div class="dropdown-title">Logged in 5 min ago</div>
+                    <a href="{{ route('admin.profile') }}" class="dropdown-item has-icon">
+                        <i class="far fa-user"></i> Profile
+                    </a>
+                    <div class="dropdown-divider"></div>
+                    <!-- Authentication -->
+                    <form method="POST" action="{{ route('logout') }}">
+                    @csrf
+                    <a href="{{ route('logout') }}" onclick="event.preventDefault(); this.closest('form').submit();" class="dropdown-item has-icon text-danger">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                        </a>
+                    </form>
+                </div>
+            </li>
+        </div>
+    </div> --}}
+
     <div class="wsus__dashboard_menu">
-    <div class="wsusd__dashboard_user">
-        <li class="dropdown"><a href="#" data-toggle="dropdown" class="nav-link dropdown-toggle nav-link-lg nav-link-user">
-            <img alt="image" src="{{ asset('frontend/images/avtar.jpg') }}" class="rounded-circle mr-1">
-            <div class="d-sm-none d-lg-inline-block">Hi, {{Auth::user()->name}}</div></a>
-            <div class="dropdown-menu dropdown-menu-right">
+        <div class="wsusd__dashboard_user">
+          <div class="dropdown">
+            <a href="#" data-toggle="dropdown" class="nav-link dropdown-toggle nav-link-lg nav-link-user">
+              <img alt="image" src="{{ asset('frontend/images/avtar.jpg') }}" class="rounded-circle mr-1">
+              <div class="d-sm-none d-lg-inline-block">Hi, {{Auth::user()->name}}</div>
+            </a>
+            <div class="dropdown-menu">
               <div class="dropdown-title">Logged in 5 min ago</div>
               <a href="{{ route('admin.profile') }}" class="dropdown-item has-icon">
                 <i class="far fa-user"></i> Profile
               </a>
               <div class="dropdown-divider"></div>
-                <!-- Authentication -->
-                <form method="POST" action="{{ route('logout') }}">
+              <!-- Authentication -->
+              <form method="POST" action="{{ route('logout') }}">
                 @csrf
                 <a href="{{ route('logout') }}" onclick="event.preventDefault(); this.closest('form').submit();" class="dropdown-item has-icon text-danger">
-                    <i class="fas fa-sign-out-alt"></i> Logout
-                    </a>
-                </form>
+                  <i class="fas fa-sign-out-alt"></i> Logout
+                </a>
+              </form>
             </div>
-          </li>
-    </div>
-  </div>
+          </div>
+        </div>
+      </div>
+
     <!--=============================
     DASHBOARD MENU END
     ==============================-->
@@ -128,6 +159,10 @@
     <script src="{{ asset('frontend/js/venobox.min.js') }}"></script>
     <!--classycountdown js-->
     <script src="{{ asset('frontend/js/jquery.classycountdown.js') }}"></script>
+
+    {{-- yajra datatables --}}
+    <script src="//cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    {{-- <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script> --}}
 
     {{-- toastr --}}
     <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
@@ -204,6 +239,9 @@
             })
         })
     </script>
+
+    {{-- yajra datatables --}}
+    @stack('scripts')
 
 </body>
 

@@ -5,7 +5,7 @@
 <!--============================
     BREADCRUMB START
 ==============================-->
-<section id="wsus__breadcrumb">
+{{-- <section id="wsus__breadcrumb">
     <div class="wsus_breadcrumb_overlay">
         <div class="container">
             <div class="row">
@@ -19,7 +19,7 @@
             </div>
         </div>
     </div>
-</section>
+</section> --}}
 <!--============================
     BREADCRUMB END
 ==============================-->
@@ -192,7 +192,7 @@
 <section id="wsus__dashboard">
     <div class="container-fluid">
         {{-- @include('vendor.layouts.sidebar') --}}
-        <div class="row">
+        <div>
             <div>
                 <div>
                     <div>

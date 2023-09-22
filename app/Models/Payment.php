@@ -19,5 +19,7 @@ class Payment extends Model
         'exp',
         'amount',
         'payment_type',
+        'user_id',
+        'orderstatus',
     ];
 }
